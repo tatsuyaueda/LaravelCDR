@@ -95,7 +95,7 @@
 				{
 					"data": "Type",
 					"render": function (data) {
-						switch (data) {
+						switch (parseInt(data)) {
 							case 10:
 								return "内線通話";
 							case 21:

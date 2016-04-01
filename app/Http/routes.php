@@ -11,6 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function(){
+	return view('index');
 });
+
+Route::get('/cdr/', ['middleware' => 'auth', 'uses' => 'CdrController@getIndex']);
+Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@postSearch']);
+
+// ユーザ認証
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');

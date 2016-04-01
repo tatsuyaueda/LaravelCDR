@@ -28,7 +28,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/cdr/';
 
     /**
      * Create a new authentication controller instance.
@@ -37,7 +37,6 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
 
     /**
@@ -69,4 +68,11 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function getLogout() {
+        $this->logout();
+        \Session::flush();
+        return redirect('/');
+    }
+
 }

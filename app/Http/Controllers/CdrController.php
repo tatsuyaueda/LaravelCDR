@@ -20,6 +20,7 @@ class CdrController extends Controller {
 		$allCount = \App\Cdr::all()->count();
 
 		$items = \App\Cdr::all()
+                ->sortByDesc('id')
 				->slice($start, $length)
 				->toArray();
 

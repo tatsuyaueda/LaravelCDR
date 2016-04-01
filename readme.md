@@ -18,6 +18,14 @@ SQLite‚ğg‚¤ê‡A.env‚ÌDB_CONNECTION‚ğsqlite‚É‚µA‚»‚Ì‚Ù‚©‚ÌDBŠÖŒW‚Ìƒpƒ‰ƒƒ^‚ğƒ
 * ‰Šúƒ†[ƒUFadmin@example.com
 * ‰ŠúƒpƒXƒ[ƒhFadmin
 
+# syslog‚ğó‚¯æ‚é•û–@
+
+```
++xxx.xxx.xxx.xxx
+*.*    /var/log/cx01.log
+*.*    | /usr/local/bin/php /path/to/LaravelCDR/artisan import
+```
+
 ## License
 
 ƒx[ƒX‚Æ‚È‚Á‚Ä‚¢‚éƒtƒŒ[ƒ€ƒ[ƒN‚ª Laravel ‚Ì‚½‚ßA‚±‚ÌWebƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚àMITƒ‰ƒCƒZƒ“ƒX‚Æ‚µ‚Ü‚·B

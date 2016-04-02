@@ -22,3 +22,8 @@ Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@pos
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// ユーザ管理
+Route::get('user/', ['middleware' => 'auth', 'uses' => 'UserController@getIndex']);
+Route::get('user/password', ['middleware' => 'auth', 'uses' => 'UserController@getPassword']);
+Route::post('user/password', ['middleware' => 'auth', 'uses' => 'UserController@postPassword']);

@@ -7,31 +7,60 @@ use App\Http\Requests;
 
 class CdrController extends Controller {
 
-	public function getIndex() {
-		return view('cdr.index');
-	}
+    public function getIndex() {
+        return view('cdr.index');
+    }
 
-	public function postSearch(Request $req) {
+    public function postSearch(Request $req) {
 
-		$draw = $req->input('draw');
-		$start = $req->input('start');
-		$length = $req->input('length');
+        $draw = $req->input('draw');
+        $start = $req->input('start');
+        $length = $req->input('length');
 
-		$allCount = \App\Cdr::all()->count();
+        $allCount = \App\Cdr::all()->count();
 
-		$items = \App\Cdr::all()
+        $items = \App\Cdr::all()
                 ->sortByDesc('id')
-				->slice($start, $length)
-				->toArray();
+                ->slice($start, $length)
+                ->toArray();
 
-		return \Response::json(
-						array(
-							'draw' => $draw,
-							'recordsTotal' => $allCount,
-							'recordsFiltered' => $allCount,
-							'data' => array_values($items)
-						)
-		);
-	}
+        return \Response::json(
+                        array(
+                            'draw' => $draw,
+                            'recordsTotal' => $allCount,
+                            'recordsFiltered' => $allCount,
+                            'data' => array_values($items)
+                        )
+        );
+    }
+
+    public function getExport() {
+        
+        $items = \App\Cdr::all()
+                ->sortByDesc('id')
+                ->toArray();
+
+        $csvHeader = ['ID', '種別', '発信者', '着信先', '通話開始時間', '通話終了時間', '通話時間', '登録日時', '更新日時'];
+        array_unshift($items, $csvHeader);
+
+        $stream = fopen('php://temp', 'r+b');
+
+        foreach ($items as $item) {
+            fputcsv($stream, $item);
+        }
+
+        rewind($stream);
+
+        $csv = str_replace(PHP_EOL, "\r\n", stream_get_contents($stream));
+        $csv = mb_convert_encoding($csv, 'SJIS-win', 'UTF-8');
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="result.csv"',
+        );
+
+        return \Response::make($csv, 200, $headers);
+        
+    }
 
 }

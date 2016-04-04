@@ -33,7 +33,10 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{action('UserController@getIndex')}}">ユーザ管理</a></li>
+                                <li><a href="{{action('UserController@getPassword')}}">パスワードの変更</a></li>
+                                @if (Auth::User()->id == 1)
+                                <li><a href="{{action('AdminController@getIndex')}}">ユーザ管理</a></li>
+                                @endif
                                 <li><a href="{{action('Auth\AuthController@getLogout')}}">ログアウト</a></li>
                             </ul>
                         </li>

@@ -19,8 +19,22 @@ class CdrController extends Controller {
 
         $allCount = \App\Cdr::all()->count();
 
-        $items = \App\Cdr::all()
-                ->sortByDesc('id')
+        $column = ['StartDateTime', 'EndDateTime', 'Duration', 'Type', 'Sender', 'Destination'];
+
+        $items = \App\Cdr::all();
+
+        // Sort
+        if (is_array($req['order'][0])) {
+            if ($req['order'][0]['dir'] == 'asc') {
+                $items = $items
+                        ->sortBy($column[$req['order'][0]['column']]);
+            } else {
+                $items = $items
+                        ->sortByDesc($column[$req['order'][0]['column']]);
+            }
+        }
+
+        $items = $items
                 ->slice($start, $length)
                 ->toArray();
 

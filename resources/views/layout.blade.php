@@ -5,9 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>発着信履歴</title>
         <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.css">
-  </head>
+          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
+</head>
     <body style="padding-top: 65px;">
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">

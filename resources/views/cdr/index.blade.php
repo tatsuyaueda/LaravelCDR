@@ -132,6 +132,7 @@
             buttons: [
                 'csvHtml5'
             ],
+            "order": [[ 0, "desc" ]],
             "processing": false,
             "serverSide": true,
             "searching": true,

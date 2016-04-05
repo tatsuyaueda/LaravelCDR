@@ -21,7 +21,19 @@ class CdrController extends Controller {
 
         $column = ['StartDateTime', 'EndDateTime', 'Duration', 'Type', 'Sender', 'Destination'];
 
-        $items = \App\Cdr::all();
+        $items = \App\Cdr::select();
+
+        // Filter
+        for ($i = 0; $i < count($column); $i++) {
+            if (is_array($req['columns'][$i]['search']) && $req['columns'][$i]['search']['value'] != '') {
+                $key = $req['columns'][$i]['search']['value'];
+                $items = $items
+                        ->where($column[$i], 'LIKE', '%' . $key . '%');
+            }
+        }
+
+        $items = $items
+                ->get();
 
         // Sort
         if (is_array($req['order'][0])) {
@@ -34,16 +46,12 @@ class CdrController extends Controller {
             }
         }
 
-        $items = $items
-                ->slice($start, $length)
-                ->toArray();
-
         return \Response::json(
                         array(
                             'draw' => $draw,
                             'recordsTotal' => $allCount,
-                            'recordsFiltered' => $allCount,
-                            'data' => array_values($items)
+                            'recordsFiltered' => $items->count(),
+                            'data' => array_values($items->slice($start, $length)->toArray())
                         )
         );
     }

@@ -1,12 +1,49 @@
 @extends('layout')
 
 @section('content')
+<div class="panel-group" id="accordion" role="tablist">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="search">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#search" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="glyphicon glyphicon-search"></span>
+                    検索条件
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="search">
+            <div class="panel-body">
+                <form class="form-horizontal" id="searchForm" action="JavaScript:return false;">
+                    <div class="form-group">
+                        <label for="col4_filter" class="col-sm-1 control-label">発信者：</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="column_filter" id="col4_filter" data-column="4">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="col5_filter" class="col-sm-1 control-label">着信先：</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="column_filter" id="col5_filter" data-column="5">
+                        </div>
+                        <div class="col-sm-offset-10">
+                            <button class="btn btn-default" type="reset">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                条件をクリアする
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <table class="table table-bordered table-condensed table-striped" id="view">
     <thead>
         <tr>
             <th>通話開始時間</th>
             <th>通話終了時間</th>
-            <th>種別</th>
+            <th>通話時間</th>
             <th>種別</th>
             <th>発信者</th>
             <th>着信先</th>
@@ -62,11 +99,34 @@
     };
 
     $(document).ready(function () {
+
+        // 検索条件のクリア
+        $('#searchForm button:reset').click(function (event) {
+            event.preventDefault();
+
+            $(this).parents('form').find(':text').val("");
+
+            $('#view').DataTable().search('')
+                    .columns().search('')
+                    .draw();
+        });
+
+        // 検索条件が変更された場合
+        $('input.column_filter').on('change', function () {
+            var columnNo = $(this).attr('data-column');
+            
+            $('#view').DataTable().column(columnNo).search(
+                $('#col' + columnNo + '_filter').val(),
+                true,
+                true
+                ).draw();
+        });
+
         $('#view').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Japanese.json"
             },
-            dom: "<'row'<'col-sm-6'B><'col-sm-6'f<'pull-right'l>>>" +
+            dom: "<'row'<'col-sm-6'B><'col-sm-6'<'pull-right'l>>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
@@ -74,7 +134,7 @@
             ],
             "processing": false,
             "serverSide": true,
-            "searching": false,
+            "searching": true,
             "ajax": {
                 "url": "{{action('CdrController@postSearch')}}",
                 "type": "POST"

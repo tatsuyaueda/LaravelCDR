@@ -1,10 +1,6 @@
 @extends('layout')
 
 @section('content')
-<a href="{{action('CdrController@getExport')}}" class="btn btn-default pull-right">
-    <span class="glyphicon glyphicon-export"></span>
-    エクスポート
-</a>
 <table class="table table-bordered table-condensed table-striped" id="view">
     <thead>
         <tr>
@@ -20,7 +16,7 @@
     </tbody>
 </table>
 <script>
-    <!--
+<!--
 
     function toHms(t) {
         var hms = "";
@@ -70,6 +66,12 @@
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Japanese.json"
             },
+            dom: "<'row'<'col-sm-6'B><'col-sm-6'f<'pull-right'l>>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                'csvHtml5'
+            ],
             "processing": false,
             "serverSide": true,
             "searching": false,

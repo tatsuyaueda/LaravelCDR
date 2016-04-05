@@ -17,7 +17,6 @@ Route::get('/', function() {
 
 Route::get('/cdr/', ['middleware' => 'auth', 'uses' => 'CdrController@getIndex']);
 Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@postSearch']);
-Route::get('/cdr/export', ['middleware' => 'auth', 'uses' => 'CdrController@getExport']);
 
 // ユーザ認証
 Route::get('auth/login', 'Auth\AuthController@getLogin');

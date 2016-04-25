@@ -7,8 +7,8 @@
         <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.css">
-          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
-</head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
+    </head>
     <body style="padding-top: 65px;">
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -55,6 +55,14 @@
     <script src="//cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script>
+        <!--
+        bootbox.setDefaults({
+            locale: 'ja',
+        });
+        //-->
+    </script>
 
     <div class="container">
         @yield('content')

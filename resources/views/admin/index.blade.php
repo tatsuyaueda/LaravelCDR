@@ -40,7 +40,7 @@
                 <form method="post" action="/admin/DelUser">
                     {!! csrf_field() !!}
                     <input type="hidden" name="UserID" value="{{$user->id}}" />
-                    <input type="submit" class="btn btn-default btn-xs" value="ユーザ削除" />
+                    <input type="button" class="btn btn-default btn-xs" value="ユーザ削除" onclick="delUserConfirm($(this).parents('form')[0]);" />
                 </form>
                 @endif
             </td>
@@ -48,4 +48,15 @@
         @endforeach
     </tbody>
 </table>
+<script>
+<!--
+    function delUserConfirm(form) {
+        bootbox.confirm("選択されたユーザを削除してもよろしいですか？", function (result) {
+            if(result){
+                form.submit();
+            }
+        });
+    }
+//-->    
+</script>
 @endsection

@@ -15,24 +15,33 @@
             <div class="panel-body">
                 <form class="form-horizontal" id="searchForm" action="JavaScript:return false;">
                     <div class="form-group">
-                        <label for="col4_filter" class="col-sm-1 control-label">発信者：</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="column_filter" id="col4_filter" data-column="4">
+                        <label for="searchSender" class="col-sm-1 control-label">発信者：</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="searchSender">
+                        </div>
+                        <label for="searchDestination" class="col-sm-1 control-label">着信先：</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="searchDestination">
+                        </div>
+                        <div class="col-sm-offset-10">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                                検索
+                            </button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="col5_filter" class="col-sm-1 control-label">着信先：</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="column_filter" id="col5_filter" data-column="5">
+                        <label for="searchDateStart" class="col-sm-1 control-label">期間：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="searchDaterangepicker" value="">
                         </div>
                         <div class="col-sm-offset-10">
                             <button class="btn btn-default" type="reset">
                                 <span class="glyphicon glyphicon-remove"></span>
-                                条件をクリアする
+                                リセット
                             </button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -41,8 +50,7 @@
 <table class="table table-bordered table-condensed table-striped" id="view">
     <thead>
         <tr>
-            <th>通話開始時間</th>
-            <th>通話終了時間</th>
+            <th>通話日時</th>
             <th>通話時間</th>
             <th>種別</th>
             <th>発信者</th>
@@ -99,27 +107,65 @@
     };
 
     $(document).ready(function () {
+        $('#searchDaterangepicker').daterangepicker(
+                {
+                    ranges: {
+                        '今日': [
+                            moment().hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ],
+                        '昨日': [
+                            moment().subtract(1, 'days').hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().subtract(1, 'days').hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ],
+                        '過去7日間': [
+                            moment().subtract(6, 'days').hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ],
+                        '過去30日間': [
+                            moment().subtract(29, 'days').hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ],
+                        '今月': [
+                            moment().startOf('month').hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().endOf('month').hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ],
+                        '先月': [
+                            moment().subtract(1, 'month').startOf('month').hours(0).minutes(0).seconds(0).milliseconds(0),
+                            moment().subtract(1, 'month').endOf('month').hours(23).minutes(59).seconds(59).milliseconds(59)
+                        ]
+                    },
+                    startDate: moment().startOf('month'),
+                    endDate: moment().endOf('month'),
+                    timePicker: true,
+                    timePicker24Hour: true,
+                    locale: {
+                        format: "YYYY年M月D日 H時m分",
+                        separator: " ～ ",
+                        applyLabel: "OK",
+                        customRangeLabel: "カスタム"
+                    }
+                }
+        );
 
         // 検索条件のクリア
         $('#searchForm button:reset').click(function (event) {
             event.preventDefault();
 
-            $(this).parents('form').find(':text').val("");
-
-            $('#view').DataTable().search('')
-                    .columns().search('')
-                    .draw();
-        });
-
-        // 検索条件が変更された場合
-        $('input.column_filter').on('change', function () {
-            var columnNo = $(this).attr('data-column');
+            $('#searchSender').val('');
+            $('#searchDestination').val('');
             
-            $('#view').DataTable().column(columnNo).search(
-                $('#col' + columnNo + '_filter').val(),
-                true,
-                true
-                ).draw();
+            $('#searchDaterangepicker').data('daterangepicker').setStartDate(moment().startOf('month'));
+            $('#searchDaterangepicker').data('daterangepicker').setEndDate(moment().endOf('month'));
+
+            $('#view').DataTable().draw();
+        });
+        
+        // 検索
+        $('#searchForm button:submit').click(function (event) {
+            event.preventDefault();
+
+            $('#view').DataTable().draw();
         });
 
         $('#view').DataTable({
@@ -132,23 +178,23 @@
             buttons: [
                 'csvHtml5'
             ],
-            "order": [[ 0, "desc" ]],
+            "order": [[0, "desc"]],
             "processing": false,
             "serverSide": true,
-            "searching": true,
+            "searching": false,
             "ajax": {
                 "url": "{{action('CdrController@postSearch')}}",
-                "type": "POST"
+                "type": "POST",
+                "data": function (d) {
+                    d.Sender = $('#searchSender').val();
+                    d.Destination = $('#searchDestination').val();
+                    d.StartDateTime = $('#searchDaterangepicker').data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm:ss');
+                    d.EndDateTime = $('#searchDaterangepicker').data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm:ss');
+                }
             },
             "columns": [
                 {
                     "data": "StartDateTime",
-                    "render": function (data) {
-                        return formatDate(new Date(data));
-                    }
-                },
-                {
-                    "data": "EndDateTime",
                     "render": function (data) {
                         return formatDate(new Date(data));
                     }

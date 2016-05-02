@@ -19,17 +19,23 @@ class CdrController extends Controller {
 
         $allCount = \App\Cdr::all()->count();
 
-        $column = ['StartDateTime', 'EndDateTime', 'Duration', 'Type', 'Sender', 'Destination'];
+        $column = ['StartDateTime', 'Duration', 'Type', 'Sender', 'Destination'];
 
         $items = \App\Cdr::select();
 
-        // Filter
-        for ($i = 0; $i < count($column); $i++) {
-            if (is_array($req['columns'][$i]['search']) && $req['columns'][$i]['search']['value'] != '') {
-                $key = $req['columns'][$i]['search']['value'];
-                $items = $items
-                        ->where($column[$i], 'LIKE', '%' . $key . '%');
-            }
+        if (strlen($req['Sender'])) {
+            $items = $items
+                    ->where('Sender', 'LIKE', '%' . $req['Sender'] . '%');
+        }
+
+        if (strlen($req['Destination'])) {
+            $items = $items
+                    ->where('Destination', 'LIKE', '%' . $req['Destination'] . '%');
+        }
+
+        if (strlen($req['StartDateTime']) && date_parse($req['StartDateTime']) && strlen($req['EndDateTime']) && date_parse($req['EndDateTime'])) {
+            $items = $items
+                    ->whereBetween('StartDateTime', array($req['StartDateTime'], $req['EndDateTime']));
         }
 
         $items = $items

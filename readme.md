@@ -26,6 +26,13 @@ SQLite‚ğg‚¤ê‡A.env‚ÌDB_CONNECTION‚ğsqlite‚É‚µA‚»‚Ì‚Ù‚©‚ÌDBŠÖŒW‚Ìƒpƒ‰ƒƒ^‚ğƒ
 *.*    | /usr/local/bin/php /path/to/LaravelCDR/artisan import
 ```
 
+# ƒfƒ‚
+
+http://cdr-sample.tatsuya.info/
+
+* ƒ†[ƒU–¼Fuser01@example.com
+* ƒpƒXƒ[ƒhFpassword01
+
 ## License
 
 ƒx[ƒX‚Æ‚È‚Á‚Ä‚¢‚éƒtƒŒ[ƒ€ƒ[ƒN‚ª Laravel ‚Ì‚½‚ßA‚±‚ÌWebƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚àMITƒ‰ƒCƒZƒ“ƒX‚Æ‚µ‚Ü‚·B

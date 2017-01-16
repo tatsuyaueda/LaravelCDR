@@ -42,7 +42,7 @@ class CdrImportCommand extends Command {
         while (!feof($fd)) {
             $text = fgets($fd);
 
-            if (!preg_match("/^.+ CALL:(TS |TE )?(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
+            if (!preg_match("/CALL:(TS|TE)?\s*(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
                 continue;
             }
 
@@ -72,6 +72,11 @@ class CdrImportCommand extends Command {
                 $endSec += 86400;
             }
 
+            // 外線着信・外線応答時の不要な情報を削る
+            if(preg_match('/^\d+\(\d+\)(\d*)$/', $dest[1], $dest2)){
+                $dest[1] = $dest2[1];
+            }
+            
             $checkSender = preg_match('/^(S\d+:)?\d+$/', $sender);
             $checkDestination = preg_match('/^(S\d+:)?\d+$/', $dest[1]);
 

@@ -42,7 +42,7 @@ class CdrImportCommand extends Command {
         while (!feof($fd)) {
             $text = fgets($fd);
 
-            if (!preg_match("/^.+ CALL:(TS|TE)? (\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
+            if (!preg_match("/^.+ CALL:(TS |TE )?(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
                 continue;
             }
 

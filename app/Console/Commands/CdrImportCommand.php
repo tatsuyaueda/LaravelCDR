@@ -53,13 +53,13 @@ class CdrImportCommand extends Command {
             //var_dump($parse);
             //var_dump($dest);
             // 転送種別
-            $type = $parse[1];
+            //$type = $parse[1];
             // 時間
-            $time = $parse[2];
+            //$time = $parse[2];
             // 発信者
             $sender = $parse[3];
             // 着信者
-            $destination = $parse[4];
+            //$destination = $parse[4];
 
             $startSec = self::convTime($dest[2]);
             $endSec = self::convTime($dest[3]);
@@ -72,14 +72,16 @@ class CdrImportCommand extends Command {
                 $endSec += 86400;
             }
 
+            // 数字だけの場合は内線として見なす
+            $checkSender = preg_match('/^(S\d+:)?\d+$/', $sender);
+            // 数字だけの場合は内線として見なす
+            $checkDestination = preg_match('/^(S\d+:)?\d+$/', $dest[1]);
+            
             // 外線着信・外線応答時の不要な情報を削る
             if(preg_match('/^\d+\(\d+\)(\d*)$/', $dest[1], $dest2)){
                 $dest[1] = $dest2[1];
             }
             
-            $checkSender = preg_match('/^(S\d+:)?\d+$/', $sender);
-            $checkDestination = preg_match('/^(S\d+:)?\d+$/', $dest[1]);
-
             echo "Dest:", $dest[1], "/", $dest[5], "\n";
             echo "Time:", $dest[2], "(", date('c', $item_start), ") - ", $dest[3], "(", date('c', $item_end), ")(", $dest[4], ")", "\n";
 

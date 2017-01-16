@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Log;
 
 class CdrImportCommand extends Command {
 
@@ -42,16 +43,28 @@ class CdrImportCommand extends Command {
         while (!feof($fd)) {
             $text = fgets($fd);
 
+            Log::debug("### Begen of Record");
+            
+            // 通話ログのみパースする
+            if(!preg_match("/CALL:/", $text)){
+                continue;
+            }
+
             if (!preg_match("/CALL:(TS|TE)?\s*(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
+                Log::error("Log Parse Error[1000]: $text");
                 continue;
             }
 
             if (!preg_match("/^(.+) (\d{2}:\d{2}:\d{2}) \- (\d{2}:\d{2}:\d{2}) \((\d{2}:\d{2}:\d{2})\) ?(\d*)/", $parse[4], $dest)) {
+                Log::error("Log Parse Error[1010]: $parse[4]");
                 continue;
             }
 
-            //var_dump($parse);
-            //var_dump($dest);
+            Log::debug("Parse Result[1000]");
+            Log::debug(print_r($parse, true));
+            Log::debug("Parse Result[1010]");
+            Log::debug(print_r($dest, true));
+            
             // 転送種別
             //$type = $parse[1];
             // 時間
@@ -82,36 +95,29 @@ class CdrImportCommand extends Command {
                 $dest[1] = $dest2[1];
             }
             
-            echo "Dest:", $dest[1], "/", $dest[5], "\n";
-            echo "Time:", $dest[2], "(", date('c', $item_start), ") - ", $dest[3], "(", date('c', $item_end), ")(", $dest[4], ")", "\n";
-
             $item_type = "";
-            $item_sender = "";
+            $item_sender = $sender;
             $item_dest = "";
 
             if ($checkSender && $checkDestination) {
-                echo "### Ext Call From:", $sender, "   To:", $dest[1], "\n";
                 // 内線通話
+                Log::debug("# Ext Call From:$sender To:$dest[1]");
                 $item_type = 10;
-                $item_sender = $sender;
                 $item_dest = $dest[1];
             } else if ($dest[5] != "") {
-                echo "### Trk Out  From:", $sender, "   To:", $dest[5], "\n";
                 // 外線発信
+                Log::debug("# Trk Out From:$sender To:$dest[5]");
                 $item_type = 21;
-                $item_sender = $sender;
                 $item_dest = $dest[5];
             } else if ($checkSender && $dest[1] != "") {
-                echo "### Trk Hunt From:", $sender, "   To:", $dest[1], "\n";
                 // 外線応答
+                Log::debug("# Trk Hunt From:$sender To:$dest[1]");
                 $item_type = 22;
-                $item_sender = $sender;
                 $item_dest = $dest[1];
             } else {
-                echo "### Trk Inc  From:", $sender, "   To:", $dest[1], "\n";
                 // 外線着信
+                Log::debug("# Trk Inc From:$sender To:$dest[1]");
                 $item_type = 23;
-                $item_sender = $sender;
                 $item_dest = $dest[1];
             }
 
@@ -123,8 +129,10 @@ class CdrImportCommand extends Command {
             $cdr->EndDateTime = date('c', $item_end);
             $cdr->Duration = $durSec;
             $cdr->save();
+            
+            Log::debug(print_r($cdr, true));
 
-            echo "-----\n";
+            Log::debug("### End of Record");
         }
 
         fclose($fd);

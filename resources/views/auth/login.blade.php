@@ -30,6 +30,10 @@
                             </label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+                        <br />
+                        <div class="text-center">
+                            <a href="{{action('Auth\PasswordController@getEmail')}}">パスワードをお忘れですか？</a>
+                        </div>
                     </form>
                 </div
             </div>

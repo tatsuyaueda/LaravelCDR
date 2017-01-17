@@ -20,6 +20,11 @@ class PasswordController extends Controller
 
     use ResetsPasswords;
 
+    // パスワード再設定後のリダイレクト先
+    protected $redirectTo = '/';
+    // パスワードリセット時のメール件名
+    protected $subject = '[発着信履歴] パスワードリセット';
+
     /**
      * Create a new password controller instance.
      *

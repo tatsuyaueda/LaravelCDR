@@ -98,7 +98,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'email' => 'auth.emails.password',
+            // メールをテキスト形式で送付
+            'email' => ['text' => 'auth.emails.password'],
             'table' => 'password_resets',
             'expire' => 60,
         ],

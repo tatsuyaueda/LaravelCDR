@@ -23,6 +23,14 @@ Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
+// パスワードリセット リクエスト
+Route::get('auth/email', 'Auth\PasswordController@getEmail');
+Route::post('auth/email', 'Auth\PasswordController@postEmail');
+ 
+// パスワードリセット
+Route::get('auth/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('auth/reset', 'Auth\PasswordController@postReset');
+
 // ユーザ管理(一般ユーザ)
 Route::get('user/password', ['middleware' => 'auth', 'uses' => 'UserController@getPassword']);
 Route::post('user/password', ['middleware' => 'auth', 'uses' => 'UserController@postPassword']);

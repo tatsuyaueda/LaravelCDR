@@ -43,12 +43,12 @@ class CdrImportCommand extends Command {
         while (!feof($fd)) {
             $text = fgets($fd);
 
-            Log::debug("### Begen of Record");
-            
             // 通話ログのみパースする
             if(!preg_match("/CALL:/", $text)){
                 continue;
             }
+            
+            Log::debug("### Begen of Record");
 
             if (!preg_match("/CALL:(TS|TE)?\s*(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (.+) -> (.+)$/", $text, $parse)) {
                 Log::error("Log Parse Error[1000]: $text");
@@ -93,6 +93,9 @@ class CdrImportCommand extends Command {
             // 外線着信・外線応答時の不要な情報を削る
             if(preg_match('/^\d+\(\d+\)(\d*)$/', $dest[1], $dest2)){
                 $dest[1] = $dest2[1];
+            }
+            if(preg_match('/^\d+\(\d+\)(\d*)$/', $sender, $sender2)){
+                $sender = $sender2[1];
             }
             
             $item_type = "";

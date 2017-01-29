@@ -1,10 +1,10 @@
 @extends('layout')
 
 @section('content')
-<div class="panel-group" id="accordion" role="tablist">
-    <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="search">
-            <h4 class="panel-title">
+<div class="box-group" id="search">
+    <div class="panel box box-default">
+        <div class="box-header with-border">
+            <h4 class="box-title">
                 <a role="button" data-toggle="collapse" data-parent="#search" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     <span class="glyphicon glyphicon-search"></span>
                     検索条件
@@ -24,7 +24,7 @@
                             <input type="text" class="form-control" id="searchDestination">
                         </div>
                         <div class="col-sm-offset-10">
-                            <button class="btn btn-default" type="submit">
+                            <button class="btn btn-primary" type="submit">
                                 <span class="glyphicon glyphicon-search"></span>
                                 検索
                             </button>
@@ -47,19 +47,26 @@
         </div>
     </div>
 </div>
-<table class="table table-bordered table-condensed table-striped" id="view">
-    <thead>
-        <tr>
-            <th>通話日時</th>
-            <th>通話時間</th>
-            <th>種別</th>
-            <th>発信者</th>
-            <th>着信先</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div class="box">
+    <div class="box-body">
+        <div class="dataTables_wrapper dt-bootstrap">
+            <table class="table table-bordered table-condensed table-striped dataTable" id="view">
+                <thead>
+                    <tr>
+                        <th>通話日時</th>
+                        <th>通話時間</th>
+                        <th>種別</th>
+                        <th>発信者</th>
+                        <th>着信先</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script>
 <!--
 
@@ -154,13 +161,13 @@
 
             $('#searchSender').val('');
             $('#searchDestination').val('');
-            
+
             $('#searchDaterangepicker').data('daterangepicker').setStartDate(moment().startOf('month'));
             $('#searchDaterangepicker').data('daterangepicker').setEndDate(moment().endOf('month'));
 
             $('#view').DataTable().draw();
         });
-        
+
         // 検索
         $('#searchForm button:submit').click(function (event) {
             event.preventDefault();

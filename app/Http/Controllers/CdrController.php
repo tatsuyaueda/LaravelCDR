@@ -60,7 +60,7 @@ class CdrController extends Controller {
         }
 
         $type = is_numeric($req['Type']) ? intval($req['Type']) : 0;
-        
+
         if ($type !== 0) {
             $items = $items
                     ->where('Type', $req['Type']);
@@ -82,9 +82,10 @@ class CdrController extends Controller {
 
         $data = $items->slice($start, $length)->toArray();
 
-        // Typeを文字列に変換
+        // Type, StartDateTimeを文字列に変換
         foreach ($data as &$value) {
             $value['Type'] = $this->type[$value['Type']];
+            $value['StartDateTime'] = date('Y/m/d H:i:s', strtotime($value['StartDateTime']));
         }
 
         return \Response::json(

@@ -25,18 +25,30 @@
         </style>
         <script src="{{asset("bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js")}}" type="text/javascript"></script>
     </head>
-    <body class="skin-blue-light sidebar-collapse ">
+    @if (trim($__env->yieldContent('sidebar')))
+    <body class="skin-blue-light">
+        @else
+    <body class="skin-blue-light sidebar-collapse">
+        @endif
         <div class="wrapper">
             <!-- トップメニュー -->
             <header class="main-header">
                 <!-- ロゴ -->
-                <a href="{{url('/')}}" class="logo">発着信履歴</a>
+                <a href="{{url('/')}}" class="logo">PBX Tool</a>
 
                 <!-- トップメニュー -->
                 <nav class="navbar navbar-static-top" role="navigation">
+                    @if (trim($__env->yieldContent('sidebar')))
+                    <a href="" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    @endif
                     <ul class="nav navbar-nav">
                         <li class="{{ Request::segment(1) === 'cdr' ? 'active' : null }}">
-                            <a href="{{action('CdrController@getIndex')}}">履歴表示</a>
+                            <a href="{{action('CdrController@getIndex')}}">通話履歴</a>
+                        </li>
+                        <li class="{{ Request::segment(1) === 'addressbook' ? 'active' : null }}">
+                            <a href="{{action('AddressBookController@getIndex')}}">電話帳</a>
                         </li>
                     </ul>
                     <div class="navbar-custom-menu">
@@ -62,6 +74,8 @@
                     </div>
                 </nav>
             </header><!-- end header -->
+
+            @yield('sidebar')
 
             <div class="content-wrapper">
                 <section class="content">   

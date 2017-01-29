@@ -18,6 +18,8 @@ Route::get('/', function() {
 Route::get('/cdr/', ['middleware' => 'auth', 'uses' => 'CdrController@getIndex']);
 Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@postSearch']);
 
+Route::get('/addressbook/', ['middleware' => 'auth', 'uses' => 'AddressBookController@getIndex']);
+
 // ユーザ認証
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');

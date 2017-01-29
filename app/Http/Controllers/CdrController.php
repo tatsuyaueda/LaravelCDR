@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
+/**
+ * 発着信履歴
+ */
 class CdrController extends Controller {
 
     //　通話種別
@@ -15,10 +18,20 @@ class CdrController extends Controller {
         23 => "外線着信",
     );
 
+    /**
+     * トップページ
+     * @return type
+     */
     public function getIndex() {
-        return view('cdr.index');
+        return view('cdr.index')
+                        ->with('types', $this->type);
     }
 
+    /**
+     * 発着信履歴をJSONで返す
+     * @param Request $req
+     * @return type
+     */
     public function postSearch(Request $req) {
 
         $draw = $req->input('draw');
@@ -46,6 +59,13 @@ class CdrController extends Controller {
                     ->whereBetween('StartDateTime', array($req['StartDateTime'], $req['EndDateTime']));
         }
 
+        $type = is_numeric($req['Type']) ? intval($req['Type']) : 0;
+        
+        if ($type !== 0) {
+            $items = $items
+                    ->where('Type', $req['Type']);
+        }
+
         $items = $items
                 ->get();
 
@@ -62,6 +82,7 @@ class CdrController extends Controller {
 
         $data = $items->slice($start, $length)->toArray();
 
+        // Typeを文字列に変換
         foreach ($data as &$value) {
             $value['Type'] = $this->type[$value['Type']];
         }

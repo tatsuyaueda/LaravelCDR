@@ -30,7 +30,7 @@
             <!-- トップメニュー -->
             <header class="main-header">
                 <!-- ロゴ -->
-                <a href="" class="logo">発着信履歴</a>
+                <a href="{{url('/')}}" class="logo">発着信履歴</a>
 
                 <!-- トップメニュー -->
                 <nav class="navbar navbar-static-top" role="navigation">

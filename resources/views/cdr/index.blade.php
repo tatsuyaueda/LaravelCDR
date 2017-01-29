@@ -212,23 +212,7 @@
                         return toHms(data);
                     }
                 },
-                {
-                    "data": "Type",
-                    "render": function (data) {
-                        switch (parseInt(data)) {
-                            case 10:
-                                return "内線通話";
-                            case 21:
-                                return "外線発信";
-                            case 22:
-                                return "外線応答";
-                            case 23:
-                                return "外線着信";
-                            default:
-                                return "";
-                        }
-                    }
-                },
+                {"data": "Type"},
                 {"data": "Sender"},
                 {"data": "Destination"},
             ]

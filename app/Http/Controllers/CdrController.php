@@ -7,6 +7,14 @@ use App\Http\Requests;
 
 class CdrController extends Controller {
 
+    //　通話種別
+    var $type = array(
+        10 => "内線通話",
+        21 => "外線発信",
+        22 => "外線応答",
+        23 => "外線着信",
+    );
+
     public function getIndex() {
         return view('cdr.index');
     }
@@ -21,7 +29,7 @@ class CdrController extends Controller {
 
         $column = ['StartDateTime', 'Duration', 'Type', 'Sender', 'Destination'];
 
-        $items = \App\Cdr::select();
+        $items = \App\Cdr::select($column);
 
         if (strlen($req['Sender'])) {
             $items = $items
@@ -52,12 +60,18 @@ class CdrController extends Controller {
             }
         }
 
+        $data = $items->slice($start, $length)->toArray();
+
+        foreach ($data as &$value) {
+            $value['Type'] = $this->type[$value['Type']];
+        }
+
         return \Response::json(
                         array(
                             'draw' => $draw,
                             'recordsTotal' => $allCount,
                             'recordsFiltered' => $items->count(),
-                            'data' => array_values($items->slice($start, $length)->toArray())
+                            'data' => array_values($data)
                         )
         );
     }

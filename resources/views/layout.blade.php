@@ -35,7 +35,9 @@
                 <!-- トップメニュー -->
                 <nav class="navbar navbar-static-top" role="navigation">
                     <ul class="nav navbar-nav">
-                        <li><a href="{{action('CdrController@getIndex')}}">履歴表示</a></li>
+                        <li class="{{ Request::segment(1) === 'cdr' ? 'active' : null }}">
+                            <a href="{{action('CdrController@getIndex')}}">履歴表示</a>
+                        </li>
                     </ul>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">

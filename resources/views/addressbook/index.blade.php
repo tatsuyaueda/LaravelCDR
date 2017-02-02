@@ -2,53 +2,66 @@
 
 @section('sidebar')
 <div class="main-sidebar">
-    <!-- Inner sidebar -->
     <div class="sidebar">
-        <!-- user panel (Optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>User Name</p>
-
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <p>{{ Auth::user()->name }}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> 在籍</a>
             </div>
-        </div><!-- /.user-panel -->
+        </div>
 
-        <!-- Search Form (Optional) -->
         <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <input type="text" name="q" class="form-control" placeholder="検索...">
                 <span class="input-group-btn">
                     <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                 </span>
             </div>
-        </form><!-- /.sidebar-form -->
+        </form>
 
-        <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">HEADER</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="#"><span>Link</span></a><</li>
-            <li><a href="#"><span>Another Link</span></a></li>
+            <li class="header">電話帳</li>
+            <li class="active">
+                <a href="#">
+                    <i class="fa fa-address-book"></i>
+                    <span>内線電話帳</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-address-book"></i>
+                    <span>個人電話帳</span>
+                </a>
+            </li>
             <li class="treeview">
-                <a href="#"><span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#">
+                    <i class="fa fa-address-book"></i>
+                    <span>共有電話帳</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
                 <ul class="treeview-menu">
                     <li><a href="#">Link in level 2</a></li>
                     <li><a href="#">Link in level 2</a></li>
                 </ul>
             </li>
-        </ul><!-- /.sidebar-menu -->
-
-    </div><!-- /.sidebar -->
-</div><!-- /.main-sidebar -->
+        </ul>
+    </div>
+</div>
 @endsection
 
 @section('content')
 <div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Web電話帳</h3>
+    </div>
+</div>
+
+<div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">発着信履歴</h3>
+        <h3 class="box-title">電話帳一覧</h3>
     </div>
     <div class="box-body">
         このサイトを利用するにはログインが必要です。<br />

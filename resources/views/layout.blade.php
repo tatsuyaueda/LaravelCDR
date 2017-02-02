@@ -9,7 +9,7 @@
         <!-- bootstrap -->
         <link href="{{asset("bower_components/AdminLTE/bootstrap/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- font awesome -->
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <!-- ionicons -->
         <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- adminLTE style -->
@@ -26,7 +26,7 @@
         <script src="{{asset("bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js")}}" type="text/javascript"></script>
     </head>
     @if (trim($__env->yieldContent('sidebar')))
-    <body class="skin-blue-light">
+    <body class="skin-blue-light sidebar-mini">
         @else
     <body class="skin-blue-light sidebar-collapse">
         @endif
@@ -34,8 +34,14 @@
             <!-- トップメニュー -->
             <header class="main-header">
                 <!-- ロゴ -->
-                <a href="{{url('/')}}" class="logo">PBX Tool</a>
-
+                <a href="{{url('/')}}" class="logo">
+                    <span class="logo-mini">
+                        P
+                    </span>
+                    <span class="logo-lg">
+                        PBX Tool
+                    </span>
+                </a>
                 <!-- トップメニュー -->
                 <nav class="navbar navbar-static-top" role="navigation">
                     @if (trim($__env->yieldContent('sidebar')))

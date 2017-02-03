@@ -24,29 +24,9 @@
 
         <ul class="sidebar-menu">
             <li class="header">電話帳</li>
-            <li class="active">
-                <a href="#">
-                    <i class="fa fa-address-book"></i>
-                    <span>内線電話帳</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fa fa-address-book"></i>
-                    <span>個人電話帳</span>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-address-book"></i>
-                    <span>共有電話帳</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#">Link in level 2</a></li>
-                    <li><a href="#">Link in level 2</a></li>
-                </ul>
-            </li>
+            @include('addressbook.GroupList', ['TypeName' => '内線電話帳', 'TypeIndex' => 1])
+            @include('addressbook.GroupList', ['TypeName' => '個人電話帳', 'TypeIndex' => 2])
+            @include('addressbook.GroupList', ['TypeName' => '共通電話帳', 'TypeIndex' => 3])
         </ul>
     </div>
 </div>

@@ -6,6 +6,7 @@
         <title>発着信履歴</title>
         <!-- for responsive -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- bootstrap -->
         <link href="{{asset("bower_components/AdminLTE/bootstrap/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- font awesome -->
@@ -108,8 +109,16 @@
         <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <script>
 <!--
-bootbox.setDefaults({
-    locale: 'ja',
+$(document).ready(function () {
+    bootbox.setDefaults({
+        locale: 'ja',
+    });
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 });
 //-->
         </script>

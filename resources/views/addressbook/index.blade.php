@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Web電話帳')
+
 @section('sidebar')
 <div class="main-sidebar">
     <div class="sidebar">
@@ -9,7 +11,7 @@
             </div>
             <div class="pull-left info">
                 <p>{{ Auth::user()->name }}</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> 在籍</a>
+                <a href="#"><i class="fa fa-circle text-gray"></i> 在籍</a>
             </div>
         </div>
 
@@ -33,12 +35,6 @@
 @endsection
 
 @section('content')
-<div class="box">
-    <div class="box-header">
-        <h3 class="box-title">Web電話帳</h3>
-    </div>
-</div>
-
 <div class="box box-primary">
     <div id="resultLoading" style="visibility: hidden;" class="overlay">
         <i class="fa fa-refresh fa-spin"></i>

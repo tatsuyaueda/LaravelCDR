@@ -3,7 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>発着信履歴</title>
+        @if (trim($__env->yieldContent('title')))
+        <title>@yield('title') - PBX Tool</title>
+        @else
+        <title>PBX Tool</title>
+        @endif
         <!-- for responsive -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -52,10 +56,10 @@
                     @endif
                     <ul class="nav navbar-nav">
                         <li class="{{ Request::segment(1) === 'cdr' ? 'active' : null }}">
-                            <a href="{{action('CdrController@getIndex')}}">通話履歴</a>
+                            <a href="{{action('CdrController@getIndex')}}">発着信履歴</a>
                         </li>
                         <li class="{{ Request::segment(1) === 'addressbook' ? 'active' : null }}">
-                            <a href="{{action('AddressBookController@getIndex')}}">電話帳</a>
+                            <a href="{{action('AddressBookController@getIndex')}}">Web電話帳</a>
                         </li>
                     </ul>
                     <div class="navbar-custom-menu">
@@ -63,24 +67,44 @@
                             @if (Auth::guest())
                             <li><a href="{{action('Auth\AuthController@getLogin')}}">ログイン</a></li>
                             @else
-                            <li class="dropdown">
+                            <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="user-image" alt="User Image">
                                     {{ Auth::user()->name }}
                                     <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{action('UserController@getPassword')}}">パスワードの変更</a></li>
-                                    @if (Auth::User()->id == 1)
-                                    <li><a href="{{action('AdminController@getIndex')}}">ユーザ管理</a></li>
-                                    @endif
-                                    <li><a href="{{action('Auth\AuthController@getLogout')}}">ログアウト</a></li>
+                                <ul class="dropdown-menu">
+                                    <!-- User image -->
+                                    <li class="user-header">
+                                        <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-circle" alt="User Image">
+                                        <p>
+                                            {{ Auth::user()->name }}
+                                        </p>
+                                    </li>
+                                    <!-- Menu Body -->
+                                    <li class="user-body">
+                                        @if (Auth::User()->id == 1)
+                                        <div class="col-xs-12 text-center">
+                                            <a href="{{action('AdminController@getIndex')}}">ユーザ管理</a>
+                                        </div>
+                                        @endif
+                                    </li>
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="{{action('UserController@getPassword')}}" class="btn btn-default btn-flat">Profile</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="{{action('Auth\AuthController@getLogout')}}" class="btn btn-default btn-flat">ログアウト</a>
+                                        </div>
+                                    </li>
                                 </ul>
                             </li>
                             @endif
                         </ul>
                     </div>
                 </nav>
-            </header><!-- end header -->
+            </header>
 
             @yield('sidebar')
 

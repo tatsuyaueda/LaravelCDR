@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', '発着信履歴')
+
 @section('content')
 <div class="box-group" id="search">
     <div class="panel box box-default">

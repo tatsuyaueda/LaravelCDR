@@ -162,7 +162,9 @@
             $('#searchForm button:submit').click(function (event) {
                 event.preventDefault();
 
-                $('#view').DataTable().draw();
+                if(!$(this).children().is('i')){
+                                    $('#view').DataTable().draw();
+                }
             });
 
             $('#view').DataTable({

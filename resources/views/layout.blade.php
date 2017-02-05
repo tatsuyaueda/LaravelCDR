@@ -85,7 +85,7 @@
             @yield('sidebar')
 
             <div class="content-wrapper">
-                <section class="content">   
+                <section class="content">
                     @yield('content')
                 </section>
             </div>
@@ -95,6 +95,28 @@
                 <div class="pull-right hidden-xs">Version1.0</div>
                 <strong>Copyright &copy; 2017 TATSUYA.info</strong>, All rights reserved.
             </footer>
+        </div>
+
+        <div id="modalDetail" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">
+                            <i class="glyphicon glyphicon-user"></i> 詳細情報
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal-loader" style="display: none; text-align: center;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                        <div id="dynamic-content"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="{{asset("bower_components/AdminLTE/bootstrap/js/bootstrap.min.js")}}" type="text/javascript"></script>
@@ -113,12 +135,38 @@ $(document).ready(function () {
     bootbox.setDefaults({
         locale: 'ja',
     });
-    
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+});
+
+// Modal Show
+$(document).on('click', 'a.modalShow', function (e) {
+    e.preventDefault();
+
+    var url = $(this).attr('href');
+
+    $('#dynamic-content').html('');
+    $('#modal-loader').show();
+    $('#modalDetail').modal('show');
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html'
+    })
+            .done(function (data) {
+                $('#dynamic-content').html('');
+                $('#dynamic-content').html(data);
+                $('#modal-loader').hide();
+            })
+            .fail(function () {
+                $('#dynamic-content').html('<i class="glyphicon glyphicon-info-sign"></i>エラーが発生しました。');
+                $('#modal-loader').hide();
+            });
 });
 //-->
         </script>

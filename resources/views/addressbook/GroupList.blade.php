@@ -1,4 +1,4 @@
-<li class="treeview">
+<li class="treeview {{ $TypeIndex == 1 ? 'active' : '' }}">
     <a href="#{{$TypeIndex}}">
         <i class="fa fa-address-book"></i>
         <span>{{$TypeName}}</span>

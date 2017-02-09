@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <form action="#" method="get" class="sidebar-form">
+        <form action="#" method="get" class="sidebar-form" id="AddressBookSearch">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="検索...">
+                <input type="text" name="keyword" class="form-control" placeholder="検索...">
                 <span class="input-group-btn">
                     <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                 </span>
@@ -66,10 +66,19 @@
         </div>
     </div>
 </div>
-<input type="hidden" name="searchTypeId" id="searchTypeId" value="" />
-<input type="hidden" name="searchGroupId" id="searchGroupId" value="" />
+<input type="hidden" name="searchTypeId" id="searchTypeId" value="1" />
+<input type="hidden" name="searchGroupId" id="searchGroupId" value="all" />
+<input type="hidden" name="searchKeyword" id="searchKeyword" value="" />
 <script>
 <!--
+
+    // 検索
+    $('form#AddressBookSearch').submit(function (event) {
+        $('input#searchKeyword').val($('form#AddressBookSearch input[name=keyword]').val());
+
+        $('#AddressBookResult').DataTable().draw();
+        return false;
+    });
 
     // 電話帳のグループ名がクリックされた場合
     $('.sidebar a').click(function (event) {
@@ -110,6 +119,7 @@
                         "data": function (d) {
                             d.typeId = $('#searchTypeId').val();
                             d.groupId = $('#searchGroupId').val();
+                            d.keyword = $('#searchKeyword').val();
                         }
                     },
                     "columns": [

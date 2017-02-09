@@ -98,23 +98,42 @@ class AddressBookController extends Controller {
         $items = $items
                 ->where('type', $typeId);
 
-        // 個人の場合自分の物のみを対象とする
+        // 種別が個人の場合：ログイン中 ユーザの物のみを対象とする
         if ($typeId == 2) {
             $user = \Auth::user();
             $items = $items
                     ->where('owner_userid', $user['id']);
         }
 
+        // 全体の件数を取得
         $allCount = $items->count();
 
+        // グループで絞り込み
         if (intval($req['groupId'])) {
             $items = $items
                     ->where('groupid', $req['groupId']);
         }
 
+        // キーワードで絞り込み
+        if (strlen($req['keyword']) != 0) {
+            $items = $items
+                    ->where(function($query) use ($req) {
+                $query
+                ->orWhere('position', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('name', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('name_kana', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('tel1', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('tel2', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('tel3', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('email', 'like', '%' . $req['keyword'] . '%')
+                ->orWhere('comment', 'like', '%' . $req['keyword'] . '%');
+            });
+        }
+
         $items = $items
                 ->get();
 
+        // 表示する件数だけ切り出す
         $data = $items->slice($start, $length)->toArray();
 
         return \Response::json(

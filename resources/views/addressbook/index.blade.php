@@ -40,7 +40,15 @@
         <i class="fa fa-refresh fa-spin"></i>
     </div>
     <div class="box-header with-border">
-        <h3 class="box-title">電話帳一覧</h3>
+        <h3 class="box-title">
+            電話帳一覧
+            <span id="breadcrumb" style="padding-left: 10px; color:gray; font-size:75%">
+                内線電話帳 > すべてを表示
+            </span>
+            <span id="breadcrumbKeyword" style="color:gray; font-size:75%; visibility: hidden;">
+                > 検索結果
+            </span>
+        </h3>
     </div>
     <div class="box-body">
         <div class="dataTables_wrapper dt-bootstrap">
@@ -74,7 +82,11 @@
 
     // 検索
     $('form#AddressBookSearch').submit(function (event) {
-        $('input#searchKeyword').val($('form#AddressBookSearch input[name=keyword]').val());
+        var keyword = $('form#AddressBookSearch input[name=keyword]').val();
+        $('input#searchKeyword').val(keyword);
+
+        // キーワードが入力されているかどうか
+        $('span#breadcrumbKeyword').css('visibility', keyword.length !== 0 ? 'visible' : 'hidden');
 
         $('#AddressBookResult').DataTable().draw();
         return false;
@@ -88,6 +100,17 @@
         }
 
         var list = $(this).attr('href').slice(1).split('-');
+
+        // 現在、表示しているグループを取得
+        var breadcrumb = '';
+
+        $.each($(this).parents('li.active').children('a'), function (i, val) {
+            breadcrumb = val.innerText + " > " + breadcrumb;
+        });
+
+        breadcrumb = breadcrumb + $(this).text();
+
+        $('span#breadcrumb').text(breadcrumb);
 
         $('input#searchTypeId').val(list[0]);
         $('input#searchGroupId').val(list[1]);

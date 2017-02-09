@@ -51,6 +51,9 @@
         </h3>
     </div>
     <div class="box-body">
+        <button type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
+            <i class="fa fa-plus"></i> 連絡先を追加する
+        </button>
         <div class="dataTables_wrapper dt-bootstrap">
             <table class="table table-hover table-striped dataTable" id="AddressBookResult">
                 <thead>
@@ -101,11 +104,14 @@
 
         var list = $(this).attr('href').slice(1).split('-');
 
+        // 個人電話帳の場合は追加ボタンを表示(ToDo:ここに表示する必要ある？)
+        $('button#addAddressButton').css('visibility', list[0] === '2' ? 'visible' : 'hidden');
+
         // 現在、表示しているグループを取得
         var breadcrumb = '';
 
         $.each($(this).parents('li.active').children('a'), function (i, val) {
-            breadcrumb = val.innerText + " > " + breadcrumb;
+            breadcrumb = val.innerText + ' > '+ breadcrumb;
         });
 
         breadcrumb = breadcrumb + $(this).text();

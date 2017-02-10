@@ -23,6 +23,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
         <style>
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
@@ -127,16 +128,18 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">
-                            <i class="glyphicon glyphicon-user"></i> 詳細情報
                         </h4>
                     </div>
                     <div class="modal-body">
                         <div id="modal-loader" style="display: none; text-align: center;">
                             <i class="fa fa-refresh fa-spin"></i>
                         </div>
-                        <div id="dynamic-content"></div>
+                        <div class="dynamic-content"></div>
                     </div>
                     <div class="modal-footer">
+                        <span class="dynamic-content">
+
+                        </span>
                         <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
                     </div>
                 </div>
@@ -152,6 +155,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/ja.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <script>
 <!--
@@ -160,11 +164,33 @@ $(document).ready(function () {
         locale: 'ja',
     });
 
+    // toastr オプション
+    toastr.options.closeButton = true;
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+});
+
+// Async Post
+$(document).on('submit', 'form[data-async]', function (event) {
+    var $form = $(this);
+
+    $.ajax({
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        data: $form.serialize(),
+        success: function (data, status) {
+            toastr.success(data.message, data.title);
+        },
+        error: function (data, status) {
+            toastr.error(data.message, data.title);
+        }
+    });
+
+    event.preventDefault();
 });
 
 // Modal Show
@@ -173,7 +199,10 @@ $(document).on('click', 'a.modalShow', function (e) {
 
     var url = $(this).attr('href');
 
-    $('#dynamic-content').html('');
+    $('#modalDetail .modal-header .modal-title').html('');
+    $('#modalDetail .modal-body .dynamic-content').html('');
+    $('#modalDetail .modal-footer .dynamic-content').html('');
+
     $('#modal-loader').show();
     $('#modalDetail').modal('show');
 
@@ -183,12 +212,24 @@ $(document).on('click', 'a.modalShow', function (e) {
         dataType: 'html'
     })
             .done(function (data) {
-                $('#dynamic-content').html('');
-                $('#dynamic-content').html(data);
+                // タイトル
+                $('#modalDetail .modal-header .modal-title')
+                        .html($(data).filter('title').text());
+
+                // コンテンツ
+                $('#modalDetail .modal-body .dynamic-content')
+                        .html($(data).filter('section.body').html());
+
+                // カスタムフッター
+                if ($(data).filter('section.footer').length !== 0) {
+                    $('#modalDetail .modal-footer .dynamic-content').html($(data).filter('section.footer').html());
+                }
+
                 $('#modal-loader').hide();
             })
             .fail(function () {
-                $('#dynamic-content').html('<i class="glyphicon glyphicon-info-sign"></i>エラーが発生しました。');
+                $('#modalDetail .modal-body .dynamic-content')
+                        .html('<i class="glyphicon glyphicon-info-sign"></i>エラーが発生しました。');
                 $('#modal-loader').hide();
             });
 });

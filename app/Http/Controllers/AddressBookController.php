@@ -24,9 +24,7 @@ class AddressBookController extends Controller {
     public function getIndex() {
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
-
         $ret = $this->_buildGroups($dbGroups);
-        debug($ret);
 
         return view('addressbook.index', [
             'AddressBookType' => $this->AddressBookType,
@@ -76,6 +74,35 @@ class AddressBookController extends Controller {
             'AddressBookType' => $this->AddressBookType,
             'record' => $record
         ]);
+    }
+
+    /**
+     *
+     * @param type $id
+     * @return type
+     */
+    public function getEdit($inputId = 0) {
+
+        $id = intval($inputId);
+
+        $record = \App\AddressBook::firstOrNew(['id' => 0]);
+
+        $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
+        $ret = $this->_buildGroups($dbGroups);
+
+        return view('addressbook.edit', [
+            'AddressBookType' => $this->AddressBookType,
+            'groups' => $ret,
+            'record' => $record
+        ]);
+    }
+
+    /**
+     * 
+     * @param Request $req
+     */
+    public function postEdit(\App\Http\Requests\AddressBookRequest $req) {
+        
     }
 
     /**

@@ -1,40 +1,8 @@
-@extends('layout')
-
-@section('title', 'Web電話帳')
-
-@section('sidebar')
-<div class="main-sidebar">
-    <div class="sidebar">
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-circle" alt="User Image">
-            </div>
-            <div class="pull-left info">
-                <p>{{ Auth::user()->name }}</p>
-                <a href="#"><i class="fa fa-circle text-gray"></i> 在籍</a>
-            </div>
-        </div>
-
-        <form action="#" method="get" class="sidebar-form" id="AddressBookSearch">
-            <div class="input-group">
-                <input type="text" name="keyword" class="form-control" placeholder="検索...">
-                <span class="input-group-btn">
-                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-                </span>
-            </div>
-        </form>
-
-        <ul class="sidebar-menu">
-            <li class="header">電話帳</li>
-            @foreach($AddressBookType as $key => $value)
-            @include('addressbook.GroupList', ['TypeName' => $value, 'TypeIndex' => $key])
-            @endforeach
-        </ul>
-    </div>
-</div>
-@endsection
+@extends('addressbook.layout')
 
 @section('content')
+@@parent
+
 <div class="box box-primary">
     <div id="resultLoading" style="visibility: hidden;" class="overlay">
         <i class="fa fa-refresh fa-spin"></i>
@@ -51,9 +19,9 @@
         </h3>
     </div>
     <div class="box-body">
-        <button type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
+        <a href="{{action('AddressBookController@getEdit')}}" type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
             <i class="fa fa-plus"></i> 連絡先を追加する
-        </button>
+        </a>
         <div class="dataTables_wrapper dt-bootstrap">
             <table class="table table-hover table-striped dataTable" id="AddressBookResult">
                 <thead>
@@ -102,10 +70,10 @@
             return;
         }
 
-        var list = $(this).attr('href').slice(1).split('-');
+        var list = $(this).attr('href').replace(/^.*?(#|$)/,'').split('-');
 
         // 個人電話帳の場合は追加ボタンを表示(ToDo:ここに表示する必要ある？)
-        $('button#addAddressButton').css('visibility', list[0] === '2' ? 'visible' : 'hidden');
+        $('a#addAddressButton').css('visibility', list[0] === '2' ? 'visible' : 'hidden');
 
         // 現在、表示しているグループを取得
         var breadcrumb = '';

@@ -2,7 +2,7 @@
 <ul class="treeview-menu">
     @foreach($childGroups['Child'] as $childGroup)
     <li>
-        <a href="#{{$TypeIndex}}-{{$childGroup['Id']}}">
+        <a href="{{action('AddressBookController@getIndex')}}#{{$TypeIndex}}-{{$childGroup['Id']}}">
             {{$childGroup['Name']}}
             @if(array_key_exists('Child', $childGroup) && count($childGroup['Child']))
             <i class="fa fa-angle-left pull-right"></i>

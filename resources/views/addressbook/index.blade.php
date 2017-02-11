@@ -19,9 +19,6 @@
             </h3>
         </div>
         <div class="box-body">
-            <a href="{{action('AddressBookController@getEdit')}}" type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
-                <i class="fa fa-plus"></i> 連絡先を追加する
-            </a>
             <div class="dataTables_wrapper dt-bootstrap">
                 <table class="table table-hover table-striped dataTable" id="AddressBookResult">
                     <thead>
@@ -37,6 +34,11 @@
                             <th>
                                 備考
                             </th>
+                            @permission('edit-addressbook')
+                            <th width="100">
+                                操作
+                            </th>
+                            @endpermission
                         </tr>
                     </thead>
                     <tbody>
@@ -65,16 +67,13 @@
     });
 
     // 電話帳のグループ名がクリックされた場合
-    $('.sidebar a').click(function (event) {
+    $('.sidebar #TypeList a').click(function (event) {
         // 子グループが存在する場合は処理しない
         if ($(this).children().is('i')) {
             return;
         }
 
         var list = $(this).attr('href').replace(/^.*?(#|$)/, '').split('-');
-
-        // 個人電話帳の場合は追加ボタンを表示(ToDo:ここに表示する必要ある？)
-        $('a#addAddressButton').css('visibility', list[0] === '2' ? 'visible' : 'hidden');
 
         // 現在、表示しているグループを取得
         var breadcrumb = '';
@@ -155,8 +154,11 @@
                             "width": "300px",
                         },
                         {"data": "comment"},
-                    ]
-                });
+                                @permission('edit-addressbook')
+                        {"data": "comment"},
+                                @endpermission
+                        ]
+            });
     });
     //-->
 </script>

@@ -24,11 +24,29 @@
             </div>
         </form>
 
-        <ul class="sidebar-menu">
+        <ul class="sidebar-menu" id="TypeList">
             <li class="header">電話帳</li>
             @foreach($AddressBookType as $key => $value)
             @include('addressbook.GroupList', ['TypeName' => $value, 'TypeIndex' => $key])
             @endforeach
+        </ul>
+
+        <ul class="sidebar-menu">
+            <li class="header">
+                <i class="fa fa-cog"></i> 管理
+            </li>
+            <li class="treeview">
+                <a href="{{action('AddressBookController@getEdit')}}">
+                    <span>連絡先追加</span>
+                </a>
+            </li>
+            @permission('edit-addressbook')
+            <li class="treeview">
+                <a href="{{action('AddressBookController@getEdit')}}">
+                    <span>グループ管理</span>
+                </a>
+            </li>
+            @endpermission
         </ul>
     </div>
 </div>

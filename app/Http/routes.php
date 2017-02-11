@@ -20,10 +20,11 @@ Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@pos
 
 // アドレス帳
 Route::get('/addressbook/', ['middleware' => 'auth', 'uses' => 'AddressBookController@getIndex']);
+Route::get('/addressbook/sel2Group', ['middleware' => 'auth', 'uses' => 'AddressBookController@getSel2Group']);
 Route::post('/addressbook/search', ['middleware' => 'auth', 'uses' => 'AddressBookController@postSearch']);
 Route::get('/addressbook/detail/{id?}', ['middleware' => 'auth', 'uses' => 'AddressBookController@getDetail']);
 Route::get('/addressbook/edit/{id?}', ['middleware' => 'auth', 'uses' => 'AddressBookController@getEdit']);
-Route::post('/addressbook/edit', ['middleware' => 'auth', 'uses' => 'AddressBookController@postEdit']);
+Route::post('/addressbook/edit/{id?}', ['middleware' => 'auth', 'uses' => 'AddressBookController@postEdit']);
 
 // ユーザ認証
 Route::get('auth/login', 'Auth\AuthController@getLogin');

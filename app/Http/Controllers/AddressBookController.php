@@ -57,6 +57,46 @@ class AddressBookController extends Controller {
         return $result;
     }
 
+    public function getSel2Group(Request $req) {
+
+        $type = intval($req['type']);
+
+        $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)
+                ->where('type', $type)
+                ->get();
+
+        return \Response::json($this->_buildGroups2($dbGroups)[1]);
+    }
+
+    private function _buildGroups2($Groups, $level = 1) {
+
+        $result = null;
+        foreach ($Groups as $Group) {
+
+            $result[$Group->type][] = array(
+                'id' => $Group->id,
+                'text' => $Group->group_name,
+                'level' => $level,
+                $Group->childs->count() ? 'disabled' : 'dummy' => 'false',
+            );
+
+            foreach ($Group->childs as $item) {
+                $result[$Group->type][] = array(
+                    'id' => $item->id,
+                    'text' => $item->group_name,
+                    'level' => $level + 1,
+                    $item->childs->count() ? 'disabled' : 'dummy' => 'false',
+                );
+
+                if ($item->childs->count()) {
+                    $result[$Group->type] = array_merge($result[$Group->type], $this->_buildGroups2($item->childs, $level + 2)[$Group->type]);
+                }
+            }
+        }
+
+        return $result;
+    }
+
     /**
      *
      * @param type $id
@@ -83,25 +123,46 @@ class AddressBookController extends Controller {
      */
     public function getEdit($inputId = 0) {
 
+        // ToDo：権限
+        
         $id = intval($inputId);
 
-        $record = \App\AddressBook::firstOrNew(['id' => 0]);
+        $record = \App\AddressBook::firstOrNew(['id' => $id]);
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
-        $ret = $this->_buildGroups($dbGroups);
 
         return view('addressbook.edit', [
             'AddressBookType' => $this->AddressBookType,
-            'groups' => $ret,
+            'groups' => $this->_buildGroups($dbGroups),
             'record' => $record
         ]);
     }
 
     /**
-     * 
+     * アドレス帳情報の編集
      * @param Request $req
      */
-    public function postEdit(\App\Http\Requests\AddressBookRequest $req) {
+    public function postEdit(\App\Http\Requests\AddressBookRequest $req, $inputId = 0) {
+
+        // ToDo：権限
+
+        $id = intval($inputId);
+        $record = \App\AddressBook::firstOrNew(['id' => $id]);
+
+        $record->position = $req['position'];
+        $record->name_kana = $req['name_kana'];
+        $record->name = $req['name'];
+        $record->type = $req['type'];
+        $record->groupid = $req['groupid'];
+        $record->tel1 = $req['tel1'];
+        $record->tel2 = $req['tel2'];
+        $record->tel3 = $req['tel3'];
+        $record->email = $req['email'];
+        $record->comment = $req['comment'];
+        
+        $record->save();
+
+        return redirect()->action('AddressBookController@getIndex');
         
     }
 
@@ -117,12 +178,9 @@ class AddressBookController extends Controller {
         $length = $req->input('length');
 
         $column = ['id', 'position', 'name', 'name_kana', 'tel1', 'tel2', 'tel3', 'email', 'comment'];
-
-        $items = \App\AddressBook::select($column);
-
         $typeId = intval($req['typeId']) ? intval($req['typeId']) : -1;
 
-        $items = $items
+        $items = \App\AddressBook::select($column)
                 ->where('type', $typeId);
 
         // 種別が個人の場合：ログイン中 ユーザの物のみを対象とする

@@ -22,18 +22,26 @@ class AddressBookRequest extends Request {
      */
     public function rules() {
         return [
-            'name' => 'required',
+            'id' => 'numeric',
             'name_kana' => 'required',
-            'tel1' => 'required',
+            'name' => 'required',
+            'tel1' => 'required|numeric',
+            'tel2' => 'numeric',
+            'tel3' => 'numeric',
+            'email' => 'email',
         ];
     }
 
-    //カスタムメッセージを設定
+    // カスタムメッセージを設定
     public function messages() {
         return [
-        'name.required' => '名前は必ず入力して下さい。',
-        'name_kana.required' => '名前(カナ)は必ず入力して下さい。',
-        'tel1.required' => '電話番号1は必ず入力して下さい。',
+            'name.required' => '名前は必ず入力して下さい。',
+            'name_kana.required' => '名前(カナ)は必ず入力して下さい。',
+            'tel1.required' => '電話番号1は必ず入力して下さい。',
+            'tel1.numeric' => '電話番号1は半角数字で入力してください。',
+            'tel2.numeric' => '電話番号2は半角数字で入力してください。',
+            'tel3.numeric' => '電話番号3は半角数字で入力してください。',
+            'email.email' => 'メールアドレスはメールアドレスの形式で入力してください。',
         ];
     }
 

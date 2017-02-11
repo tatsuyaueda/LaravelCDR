@@ -2,49 +2,50 @@
 
 @section('content')
 @@parent
-
-<div class="box box-primary">
-    <div id="resultLoading" style="visibility: hidden;" class="overlay">
-        <i class="fa fa-refresh fa-spin"></i>
-    </div>
-    <div class="box-header with-border">
-        <h3 class="box-title">
-            電話帳一覧
-            <span id="breadcrumb" style="padding-left: 10px; color:gray; font-size:75%">
-                内線電話帳 > すべてを表示
-            </span>
-            <span id="breadcrumbKeyword" style="color:gray; font-size:75%; visibility: hidden;">
-                > 検索結果
-            </span>
-        </h3>
-    </div>
-    <div class="box-body">
-        <a href="{{action('AddressBookController@getEdit')}}" type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
-            <i class="fa fa-plus"></i> 連絡先を追加する
-        </a>
-        <div class="dataTables_wrapper dt-bootstrap">
-            <table class="table table-hover table-striped dataTable" id="AddressBookResult">
-                <thead>
-                    <tr>
-                        <th>
-                        </th>
-                        <th>
-                            役職/名前
-                        </th>
-                        <th>
-                            連絡先
-                        </th>
-                        <th>
-                            備考
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+<section class="content">
+    <div class="box box-primary">
+        <div id="resultLoading" style="visibility: hidden;" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                電話帳一覧
+                <span id="breadcrumb" style="padding-left: 10px; color:gray; font-size:75%">
+                    内線電話帳 > すべてを表示
+                </span>
+                <span id="breadcrumbKeyword" style="color:gray; font-size:75%; visibility: hidden;">
+                    > 検索結果
+                </span>
+            </h3>
+        </div>
+        <div class="box-body">
+            <a href="{{action('AddressBookController@getEdit')}}" type="button" class="btn btn-primary btn-xs" style="visibility: hidden;" id="addAddressButton">
+                <i class="fa fa-plus"></i> 連絡先を追加する
+            </a>
+            <div class="dataTables_wrapper dt-bootstrap">
+                <table class="table table-hover table-striped dataTable" id="AddressBookResult">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                役職/名前
+                            </th>
+                            <th>
+                                連絡先
+                            </th>
+                            <th>
+                                備考
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+</section>
 <input type="hidden" name="searchTypeId" id="searchTypeId" value="1" />
 <input type="hidden" name="searchGroupId" id="searchGroupId" value="all" />
 <input type="hidden" name="searchKeyword" id="searchKeyword" value="" />
@@ -70,7 +71,7 @@
             return;
         }
 
-        var list = $(this).attr('href').replace(/^.*?(#|$)/,'').split('-');
+        var list = $(this).attr('href').replace(/^.*?(#|$)/, '').split('-');
 
         // 個人電話帳の場合は追加ボタンを表示(ToDo:ここに表示する必要ある？)
         $('a#addAddressButton').css('visibility', list[0] === '2' ? 'visible' : 'hidden');
@@ -79,7 +80,7 @@
         var breadcrumb = '';
 
         $.each($(this).parents('li.active').children('a'), function (i, val) {
-            breadcrumb = val.innerText + ' > '+ breadcrumb;
+            breadcrumb = val.innerText + ' > ' + breadcrumb;
         });
 
         breadcrumb = breadcrumb + $(this).text();

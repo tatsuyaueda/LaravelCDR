@@ -24,6 +24,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+        <link  rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" />
         <style>
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
@@ -110,9 +111,7 @@
             @yield('sidebar')
 
             <div class="content-wrapper">
-                <section class="content">
-                    @yield('content')
-                </section>
+                @yield('content')
             </div>
 
             <!-- フッター -->
@@ -157,6 +156,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/ja.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script>
 <!--
 $(document).ready(function () {

@@ -85,7 +85,7 @@
                                     </li>
                                     <!-- Menu Body -->
                                     <li class="user-body">
-                                        @if (Auth::User()->id == 1)
+                                        @role('admin')
                                         <div class="col-xs-12 text-center">
                                             <a href="{{action('AdminController@getIndex')}}">ユーザ管理</a>
                                         </div>

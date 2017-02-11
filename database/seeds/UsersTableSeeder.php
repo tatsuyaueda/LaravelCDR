@@ -12,15 +12,20 @@ class UsersTableSeeder extends Seeder {
     public function run() {
         //DB::table('roles')->truncate();
 
-        $admin = new \App\Role();
-        $admin->name = 'admin';
-        $admin->display_name = '管理者';
-        $admin->save();
+        $adminRole = new \App\Role();
+        $adminRole->name = 'admin';
+        $adminRole->display_name = '管理者';
+        $adminRole->save();
 
-        $operator = new \App\Role();
-        $operator->name = 'operator';
-        $operator->display_name = '担当者';
-        $operator->save();
+        $operatorRole = new \App\Role();
+        $operatorRole->name = 'operator';
+        $operatorRole->display_name = '担当者';
+        $operatorRole->save();
+
+        $editAddressBook = new \App\Permission();
+        $editAddressBook->name = 'edit-addressbook';
+        $editAddressBook->display_name = 'アドレス帳 編集者';
+        $editAddressBook->save();
 
         //DB::table('users')->truncate();
 
@@ -31,9 +36,11 @@ class UsersTableSeeder extends Seeder {
             'password' => bcrypt('admin'),
         ]);
 
-        $user = \App\User::where('username','=','admin')->first();
-        $user->attachRole( $admin);
+        $adminRole->attachPermission($editAddressBook);
+        $operatorRole->attachPermission($editAddressBook);
 
+        $user = \App\User::where('username', '=', 'admin')->first();
+        $user->attachRole($adminRole);
     }
 
 }

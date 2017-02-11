@@ -105,7 +105,7 @@ class AddressBookController extends Controller {
     public function getDetail($id) {
 
         if (!intval($id)) {
-            abort(400, 'Invalid Parameter');
+            abort(400);
         }
 
         $record = \App\AddressBook::find($id);
@@ -136,7 +136,7 @@ class AddressBookController extends Controller {
 
         // 権限が無く、既存レコード編集場合は、個人電話帳のみとする
         if (!\Entrust::can('edit-addressbook') && isset($record->type) && $record->type != 2) {
-            abort(403, 'Unauthorized action.');
+            abort(403);
         }
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
@@ -156,7 +156,7 @@ class AddressBookController extends Controller {
 
         // 権限が無い場合は、個人電話帳のみとする
         if (!\Entrust::can('edit-addressbook') && $req['type'] != 2) {
-            abort(403, 'Unauthorized action.');
+            abort(403);
         }
 
         $id = intval($inputId);

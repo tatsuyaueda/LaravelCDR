@@ -146,8 +146,10 @@
                     ajax: {
                         url: '{{action('AddressBookController@getSel2Group')}}',
                         dataType: 'json',
-                        data: {
-                            type: $('select[name=type]').val(), // search term
+                        data:  function () {
+                            return {
+                                type: $('select[name=type]').val()
+                            };
                         },
                         processResults: function (data, params) {
                             return {
@@ -158,7 +160,7 @@
                     },
                     minimumResultsForSearch: Infinity,
                     templateResult: formatResult,
-                })
+                });
                 
                 //if
 

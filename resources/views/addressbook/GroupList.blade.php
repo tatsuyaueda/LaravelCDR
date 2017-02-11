@@ -8,7 +8,7 @@
         <li>
             <a href="{{action('AddressBookController@getIndex')}}#{{$TypeIndex}}-all">すべてを表示</a>
         </li>
-        @if(array_key_exists($TypeIndex, $groups) && is_array($groups[$TypeIndex]))
+        @if($groups != null && array_key_exists($TypeIndex, $groups) && is_array($groups[$TypeIndex]))
         @foreach($groups[$TypeIndex] as $group)
         <li>
             <a href="{{action('AddressBookController@getIndex')}}#{{$TypeIndex}}-{{$group['Id']}}">

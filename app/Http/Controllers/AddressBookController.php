@@ -13,8 +13,8 @@ class AddressBookController extends Controller {
     // アドレス帳種別
     var $AddressBookType = array(
         1 => '内線電話帳',
-        2 => "個人電話帳",
-        3 => "共通電話帳",
+        2 => '個人電話帳',
+        3 => '共通電話帳',
     );
 
     /**
@@ -105,7 +105,7 @@ class AddressBookController extends Controller {
     public function getDetail($id) {
 
         if (!intval($id)) {
-            // die
+            abort(400, 'Invalid Parameter');
         }
 
         $record = \App\AddressBook::find($id);
@@ -123,16 +123,26 @@ class AddressBookController extends Controller {
      */
     public function getEdit($inputId = 0) {
 
-        // ToDo：権限
-        
         $id = intval($inputId);
 
+        $AddressBook = $this->AddressBookType;
+        // 権限が無い場合は、個人電話帳のみとする
+        if (!\Entrust::can('edit-addressbook')) {
+            unset($AddressBook[1]);
+            unset($AddressBook[3]);
+        }
+
         $record = \App\AddressBook::firstOrNew(['id' => $id]);
+
+        // 権限が無く、既存レコード編集場合は、個人電話帳のみとする
+        if (!\Entrust::can('edit-addressbook') && isset($record->type) && $record->type != 2) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
 
         return view('addressbook.edit', [
-            'AddressBookType' => $this->AddressBookType,
+            'AddressBookType' => $AddressBook,
             'groups' => $this->_buildGroups($dbGroups),
             'record' => $record
         ]);
@@ -144,7 +154,10 @@ class AddressBookController extends Controller {
      */
     public function postEdit(\App\Http\Requests\AddressBookRequest $req, $inputId = 0) {
 
-        // ToDo：権限
+        // 権限が無い場合は、個人電話帳のみとする
+        if (!\Entrust::can('edit-addressbook') && $req['type'] != 2) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $id = intval($inputId);
         $record = \App\AddressBook::firstOrNew(['id' => $id]);
@@ -159,11 +172,10 @@ class AddressBookController extends Controller {
         $record->tel3 = $req['tel3'];
         $record->email = $req['email'];
         $record->comment = $req['comment'];
-        
+
         $record->save();
 
         return redirect()->action('AddressBookController@getIndex');
-        
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<div class="row">
+<section class="content">
     @if (Auth::guest())
     <div class="box">
         <div class="box-header with-border">
@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-      <div class="col-md-4">
+    <div class="col-md-4">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Web電話帳</h3>
@@ -34,5 +34,5 @@
         </div>
     </div>
     @endif
-</div>
+</section>
 @endsection

@@ -44,7 +44,7 @@ Route::get('user/password', ['middleware' => 'auth', 'uses' => 'UserController@g
 Route::post('user/password', ['middleware' => 'auth', 'uses' => 'UserController@postPassword']);
 
 // ユーザ管理(管理者)
-Route::get('admin/', ['middleware' => 'adminauth', 'uses' => 'AdminController@getIndex']);
-Route::get('admin/AddUser', ['middleware' => 'adminauth', 'uses' => 'AdminController@getAddUser']);
-Route::post('admin/AddUser', ['middleware' => 'adminauth', 'uses' => 'AdminController@postAddUser']);
-Route::post('admin/DelUser', ['middleware' => 'adminauth', 'uses' => 'AdminController@postDelUser']);
+Route::get('admin/', ['middleware' => ['role:admin'], 'uses' => 'AdminController@getIndex']);
+Route::get('admin/AddUser', ['middleware' => ['role:admin'], 'uses' => 'AdminController@getAddUser']);
+Route::post('admin/AddUser', ['middleware' => ['role:admin'], 'uses' => 'AdminController@postAddUser']);
+Route::post('admin/DelUser', ['middleware' => ['role:admin'], 'uses' => 'AdminController@postDelUser']);

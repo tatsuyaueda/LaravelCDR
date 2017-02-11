@@ -10,8 +10,9 @@ class AdminController extends Controller {
 
     public function getIndex() {
 
-        $users = User::all()
-                ->sortByDesc('id');
+        $users = User::with(array('roles' => function($query) {
+                        $query->orderBy('id', 'desc');
+                    }))->get();
 
         return view('admin.index')
                         ->with('users', $users);
@@ -19,22 +20,33 @@ class AdminController extends Controller {
 
     public function getAddUser() {
 
-        return view('admin.AddUser');
+        $roles = \App\Role::all();
+
+        return view('admin.AddUser')
+                        ->with('roles', $roles);
     }
 
-    public function postAddUser(Request $request) {
+    public function postAddUser(Request $req) {
 
-        $this->validate($request, [
+        $this->validate($req, [
             'name' => 'required',
+            'username' => 'required|unique:users',
+            'roles' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:5',
         ]);
 
-        \DB::table('users')->insert([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        $user = new \App\User;
+        $user->name = $req['name'];
+        $user->username = $req['username'];
+        $user->name = $req['name'];
+        $user->email = $req['email'];
+        $user->password = bcrypt($req->password);
+        $user->save();
+
+        foreach ($req['roles'] as $role) {
+            $user->roles()->attach($role);
+        }
 
         \Session::flash('success_message', 'ユーザの追加が完了しました。');
 

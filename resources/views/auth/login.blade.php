@@ -19,8 +19,8 @@
             <form class="form-signin" method="post" action="{{action('Auth\AuthController@postLogin')}}">
                 {!! csrf_field() !!}
                 <div class="form-group">
-                    <label for="email" class="sr-only">メールアドレス</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="メールアドレス" required autofocus>
+                    <label for="username" class="sr-only">ユーザ名</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="ユーザ名" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="password" class="sr-only">パスワード</label>

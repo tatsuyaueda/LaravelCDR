@@ -8,7 +8,7 @@
             <i class="fa fa-angle-left pull-right"></i>
             @endif
         </a>
-        @include('addressbook.GroupListChild', ['childGroups' => $childGroup])
+        @include('addressbook.layout_GroupListChild', ['childGroups' => $childGroup])
     </li>
     @endforeach
 </ul>

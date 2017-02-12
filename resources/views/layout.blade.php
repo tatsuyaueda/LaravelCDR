@@ -25,6 +25,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{asset('bower_components/jquery-treegrid/css/jquery.treegrid.css')}}" rel="stylesheet" type="text/css" />
         <style>
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
@@ -157,6 +158,8 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.bootstrap3.js")}}" type="text/javascript"></script>
         <script>
 <!--
 $(document).ready(function () {

@@ -13,9 +13,24 @@ class AddressBookController extends Controller {
     // アドレス帳種別
     var $AddressBookType = array(
         1 => '内線電話帳',
-        2 => '個人電話帳',
-        3 => '共通電話帳',
+        2 => '共通電話帳',
+        9 => '個人電話帳',
     );
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct() {
+
+        // 全てのビューで利用する変数を定義
+        $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
+        $Groups = $this->_buildGroups($dbGroups);
+
+        \View::composer('addressbook.*', function($view) use ($Groups) {
+            $view->with('AddressBookType', $this->AddressBookType);
+            $view->with('Groups', $Groups);
+        });
+    }
 
     /**
      * トップページ
@@ -23,13 +38,49 @@ class AddressBookController extends Controller {
      */
     public function getIndex() {
 
-        $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
-        $ret = $this->_buildGroups($dbGroups);
+        return view('addressbook.index');
+    }
 
-        return view('addressbook.index', [
-            'AddressBookType' => $this->AddressBookType,
-            'groups' => $ret
-        ]);
+    /**
+     * グループ管理
+     * @return type
+     */
+    public function getGroup() {
+
+        $dbGroups = \App\AddressBookGroup::all();
+
+        $GroupList = array();
+
+        foreach ($dbGroups as $group) {
+            $GroupList[$group->type][] = $group;
+        }
+
+        return view('addressbook.group')
+                        ->with('GroupList', $GroupList);
+    }
+
+    public function getGroupEdit($inputId = 0) {
+
+        $id = intval($inputId);
+
+        $AddressBook = $this->AddressBookType;
+        // 権限が無い場合は、個人電話帳のみとする
+        if (!\Entrust::can('edit-addressbook')) {
+            unset($AddressBook[1]);
+            unset($AddressBook[2]);
+        }
+
+        $record = \App\AddressBookGroup::firstOrNew(['id' => $id]);
+
+        // 権限が無く、既存レコード編集場合は、個人電話帳のみとする
+        if (!\Entrust::can('edit-addressbook') && isset($record->type) && $record->type != 9) {
+            abort(403);
+        }
+
+        return view('addressbook.group_edit')
+                        ->with('editAddressBookType', $AddressBook)
+                        ->with('record', $record);
+        
     }
 
     private function _buildGroups($Groups) {
@@ -60,15 +111,23 @@ class AddressBookController extends Controller {
     public function getSel2Group(Request $req) {
 
         $type = intval($req['type']);
+        $isDisable = $req['from'] == 'GroupEdit' ?  false : true;
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)
                 ->where('type', $type)
                 ->get();
 
-        return \Response::json($this->_buildGroups2($dbGroups)[1]);
+        return \Response::json($this->_buildGroups2($dbGroups, $isDisable)[1]);
     }
 
-    private function _buildGroups2($Groups, $level = 1) {
+    /**
+     * 
+     * @param type $Groups
+     * @param type $isDisable 末端のグループ以外を無効とするか
+     * @param type $level
+     * @return type
+     */
+    private function _buildGroups2($Groups, $isDisable, $level = 1) {
 
         $result = null;
         foreach ($Groups as $Group) {
@@ -77,19 +136,19 @@ class AddressBookController extends Controller {
                 'id' => $Group->id,
                 'text' => $Group->group_name,
                 'level' => $level,
-                $Group->childs->count() ? 'disabled' : 'dummy' => 'false',
+                ($Group->childs->count() and $isDisable) ? 'disabled' : 'dummy' => 'false',
             );
-
+            
             foreach ($Group->childs as $item) {
                 $result[$Group->type][] = array(
                     'id' => $item->id,
                     'text' => $item->group_name,
                     'level' => $level + 1,
-                    $item->childs->count() ? 'disabled' : 'dummy' => 'false',
+                    ($item->childs->count() and $isDisable) ? 'disabled' : 'dummy' => 'false',
                 );
 
                 if ($item->childs->count()) {
-                    $result[$Group->type] = array_merge($result[$Group->type], $this->_buildGroups2($item->childs, $level + 2)[$Group->type]);
+                    $result[$Group->type] = array_merge($result[$Group->type], $this->_buildGroups2($item->childs, $isDisable, $level + 2)[$Group->type]);
                 }
             }
         }
@@ -111,7 +170,6 @@ class AddressBookController extends Controller {
         $record = \App\AddressBook::find($id);
 
         return view('addressbook.detail', [
-            'AddressBookType' => $this->AddressBookType,
             'record' => $record
         ]);
     }
@@ -129,23 +187,19 @@ class AddressBookController extends Controller {
         // 権限が無い場合は、個人電話帳のみとする
         if (!\Entrust::can('edit-addressbook')) {
             unset($AddressBook[1]);
-            unset($AddressBook[3]);
+            unset($AddressBook[2]);
         }
 
         $record = \App\AddressBook::firstOrNew(['id' => $id]);
 
         // 権限が無く、既存レコード編集場合は、個人電話帳のみとする
-        if (!\Entrust::can('edit-addressbook') && isset($record->type) && $record->type != 2) {
+        if (!\Entrust::can('edit-addressbook') && isset($record->type) && $record->type != 9) {
             abort(403);
         }
 
-        $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
-
-        return view('addressbook.edit', [
-            'AddressBookType' => $AddressBook,
-            'groups' => $this->_buildGroups($dbGroups),
-            'record' => $record
-        ]);
+        return view('addressbook.edit')
+                        ->with('editAddressBookType', $AddressBook)
+                        ->with('record', $record);
     }
 
     /**
@@ -155,7 +209,7 @@ class AddressBookController extends Controller {
     public function postEdit(\App\Http\Requests\AddressBookRequest $req, $inputId = 0) {
 
         // 権限が無い場合は、個人電話帳のみとする
-        if (!\Entrust::can('edit-addressbook') && $req['type'] != 2) {
+        if (!\Entrust::can('edit-addressbook') && $req['type'] != 9) {
             abort(403);
         }
 

@@ -8,8 +8,8 @@
         <li>
             <a href="{{action('AddressBookController@getIndex')}}#{{$TypeIndex}}-all">すべてを表示</a>
         </li>
-        @if($groups != null && array_key_exists($TypeIndex, $groups) && is_array($groups[$TypeIndex]))
-        @foreach($groups[$TypeIndex] as $group)
+        @if($Groups != null && array_key_exists($TypeIndex, $Groups) && is_array($Groups[$TypeIndex]))
+        @foreach($Groups[$TypeIndex] as $group)
         <li>
             <a href="{{action('AddressBookController@getIndex')}}#{{$TypeIndex}}-{{$group['Id']}}">
                 {{$group['Name']}}
@@ -17,7 +17,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
                 @endif
             </a>
-            @include('addressbook.GroupListChild', ['childGroups' => $group])
+            @include('addressbook.layout_GroupListChild', ['childGroups' => $group])
         </li>
         @endforeach
         @endif

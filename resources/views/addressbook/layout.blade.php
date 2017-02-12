@@ -27,7 +27,7 @@
         <ul class="sidebar-menu" id="TypeList">
             <li class="header">電話帳</li>
             @foreach($AddressBookType as $key => $value)
-            @include('addressbook.GroupList', ['TypeName' => $value, 'TypeIndex' => $key])
+            @include('addressbook.layout_GroupList', ['TypeName' => $value, 'TypeIndex' => $key])
             @endforeach
         </ul>
 
@@ -42,7 +42,7 @@
             </li>
             @permission('edit-addressbook')
             <li class="treeview">
-                <a href="{{action('AddressBookController@getEdit')}}">
+                <a href="{{action('AddressBookController@getGroup')}}">
                     <span>グループ管理</span>
                 </a>
             </li>

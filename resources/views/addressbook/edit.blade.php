@@ -13,17 +13,8 @@
                     </h3>
                 </div>
                 <div class="box-body">
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>エラー</strong><br />
-                        入力値に問題があります。<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
+                    @include('notification')
+
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>

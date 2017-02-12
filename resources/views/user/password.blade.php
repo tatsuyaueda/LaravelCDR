@@ -16,23 +16,8 @@
             </div>
             <div class="box-body">
                 <div class="col-md-4">
-                    @if (Session::has('error_message'))
-                    <div class="alert alert-danger">{{ Session::get('error_message') }}</div>
-                    @elseif (Session::has('success_message'))
-                    <div class="alert alert-success">{{ Session::get('success_message') }}</div>
-                    @endif
-
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>エラー</strong><br />
-                        入力値に問題があります。<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
+                    @include('notification')
+                    
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label for="old_password" class="sr-only">現在のパスワード</label>

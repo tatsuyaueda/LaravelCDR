@@ -8,17 +8,8 @@
         <div class="box box-solid box-info">
             <div class="box-header">ログイン</div>
             <div class="box-body">
-                @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>エラー</strong><br />
-                    入力値に問題があります。<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
+                @include('notification')
+
                 <form class="form-signin" method="post" action="{{action('Auth\AuthController@postLogin')}}">
                     {!! csrf_field() !!}
                     <div class="form-group">

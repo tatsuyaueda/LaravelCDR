@@ -8,11 +8,7 @@
             <h3 class="box-title">ユーザ管理</h3>
         </div>
         <div class="box-body">
-            @if (Session::has('error_message'))
-            <div class="alert alert-danger">{{ Session::get('error_message') }}</div>
-            @elseif (Session::has('success_message'))
-            <div class="alert alert-success">{{ Session::get('success_message') }}</div>
-            @endif
+            @include('notification')
 
             <a href="{{action('AdminController@getAddUser')}}" class="btn btn-primary">ユーザ追加</a>
 

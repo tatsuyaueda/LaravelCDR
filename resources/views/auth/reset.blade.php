@@ -8,17 +8,7 @@
         <div class="box box-solid box-info">
             <div class="box-header">パスワードリセット</div>
             <div class="box-body">
-                @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>エラー</strong><br />
-                    入力値に問題があります。<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
+                @include('notification')
 
                 <form method="POST" action="{{action('Auth\PasswordController@postReset')}}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">

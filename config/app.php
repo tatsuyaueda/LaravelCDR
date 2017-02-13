@@ -141,6 +141,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         // Entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
+        // IDE Helper
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
     ],
     /*
       |--------------------------------------------------------------------------

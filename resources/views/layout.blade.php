@@ -158,6 +158,8 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/ja.js"></script>
+        <script src="{{asset("js/select2_InitValue.js")}}" type="text/javascript"></script>
         <script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.bootstrap3.js")}}" type="text/javascript"></script>
         <script>

@@ -157,28 +157,7 @@
                 
                 //if
 
-        var $option = $('<option selected>読み込み中...</option>').val("{{old('group', $record->group)}}");
-        $select2grp.append($option).trigger('change');
-
-         $.ajax({
-            type: 'GET',
-                    url: '{{action('AddressBookController@getSel2Group')}}',
-                    dataType: 'json',
-                    data: {
-                            type: $('select[name=type]').val(), // search term
-                        },
-                    success:function (data) {
-                        var filtered = $.grep(data,
-                            function(elem, index) {
-                                return (elem.id == "{{old('group', $record->groupid)}}");
-                            }
-                        );
-                        
-                $option.text(filtered[0].text).val(filtered[0].id);
-                $option.removeData();
-                $select2grp.trigger('change');
-            }
-        });
+        
     });
     function formatResult(node) {
         var $result = $('<span style="padding-left:' + (10 * node.level) + 'px;">' + node.text + '</span>');

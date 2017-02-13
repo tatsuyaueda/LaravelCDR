@@ -56,7 +56,7 @@
                                         <label for="inputName" class="control-label">名前</label>
                                     </th>
                                     <td>
-                                        <input type="text" class="form-control input-sm" name="name" id="inputName" value="{{old('name', $record->name)}}" placeholder="名前">
+                                        <input type="text" class="form-control input-sm" name="group_name" id="inputName" value="{{old('group_name', $record->group_name)}}" placeholder="名前" required>
                                     </td>
                                 </tr>
                             </tbody>
@@ -70,11 +70,9 @@
     </div>
 </section>
 <script>
-<!--
     $(document).ready(function () {
-
         $('select[name=type]').select2({
-            minimumResultsForSearch: Infinity,
+            minimumResultsForSearch: Infinity
         });
         
         var $select2grp = $('select[name=parent_groupid]')
@@ -82,11 +80,11 @@
                     ajax: {
                         url: '{{action('AddressBookController@getSel2Group')}}',
                         dataType: 'json',
-                        data:  function () {
+                        data:  function (term, page) {
                             return {
                                 type: $('select[name=type]').val(),
                                 from: 'GroupEdit'
-                            };
+                                };
                         },
                         processResults: function (data, params) {
                             return {
@@ -96,38 +94,13 @@
                         cache: true,
                     },
                     minimumResultsForSearch: Infinity,
-                    templateResult: formatResult,
+                    templateResult: function (node) {
+                        return $('<span style="padding-left:' + (10 * node.level) + 'px;">' + node.text + '</span>');
+                    }
                 });
                 
-                //if
-
-        var $option = $('<option selected>読み込み中...</option>').val("{{old('parent_groupid', $record->parent_groupid)}}");
-        $select2grp.append($option).trigger('change');
-
-         $.ajax({
-            type: 'GET',
-                    url: '{{action('AddressBookController@getSel2Group')}}',
-                    dataType: 'json',
-                    data: {
-                            type: $('select[name=type]').val(), // search term
-                        },
-                    success:function (data) {
-                        var filtered = $.grep(data,
-                            function(elem, index) {
-                                return (elem.id == "{{old('parent_groupid', $record->parent_groupid)}}");
-                            }
-                        );
-                        
-                $option.text(filtered[0].text).val(filtered[0].id);
-                $option.removeData();
-                $select2grp.trigger('change');
-            }
-        });
+                select2_InitValue($select2grp, '{{action('AddressBookController@getSel2Group')}}', {type: {{old('type', $record->type)}}} , {{old('parent_groupid', $record->parent_groupid)}});
+                
     });
-    function formatResult(node) {
-        var $result = $('<span style="padding-left:' + (10 * node.level) + 'px;">' + node.text + '</span>');
-        return $result;
-    }
-    //-->
 </script>
 @endsection

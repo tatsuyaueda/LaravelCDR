@@ -12,7 +12,7 @@ class CreateCdrsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Cdrs', function (Blueprint $table) {
+        Schema::create('cdrs', function (Blueprint $table) {
             $table->increments('id');
 			$table->integer('Type');
 			$table->string('Sender');

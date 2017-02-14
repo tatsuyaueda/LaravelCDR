@@ -382,7 +382,7 @@ class AddressBookController extends Controller
         $start = $req->input('start');
         $length = $req->input('length');
 
-        $column = ['id', 'position', 'name', 'name_kana', 'tel1', 'tel2', 'tel3', 'email', 'comment'];
+        $column = ['id', 'name_kana', 'tel1', 'name', 'position', 'tel2', 'tel3', 'email', 'comment'];
         $typeId = intval($req['typeId']) ? intval($req['typeId']) : -1;
 
         $items = \App\AddressBook::select($column)
@@ -422,6 +422,17 @@ class AddressBookController extends Controller
 
         $items = $items
             ->get();
+
+        // Sort
+        if (is_array($req['order'][0])) {
+            if ($req['order'][0]['dir'] == 'asc') {
+                $items = $items
+                    ->sortBy($column[$req['order'][0]['column']]);
+            } else {
+                $items = $items
+                    ->sortByDesc($column[$req['order'][0]['column']]);
+            }
+        }
 
         // 表示する件数だけ切り出す
         $data = $items->slice($start, $length)->toArray();

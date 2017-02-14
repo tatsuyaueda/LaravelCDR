@@ -116,7 +116,7 @@
                     dom: "<'row'<'col-sm-12'<'pull-right'l>>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                    "order": [[0, "desc"]],
+                    "order": [[1, "asc"]],
                     "processing": false,
                     "serverSide": true,
                     "searching": false,
@@ -132,6 +132,7 @@
                     "columns": [
                         {
                             "data": null,
+                            "orderable": false,
                             "render": function (data, type, row) {
                                 return '<div class="image">' +
                                     '<img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&s=60" class="img-circle" alt="User Image">' +
@@ -163,10 +164,14 @@
                             },
                             "width": "300px",
                         },
-                        {"data": "comment"},
+                        {
+                            "data": "comment",
+                            "orderable": false,
+                        },
                             @permission('edit-addressbook')
                         {
                             "data": null,
+                            "orderable": false,
                             "width": "150px",
                             "render": function (data, type, row) {
                                 var buffer = '';

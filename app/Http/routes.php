@@ -20,6 +20,7 @@ Route::post('/cdr/search', ['middleware' => 'auth', 'uses' => 'CdrController@pos
 
 // アドレス帳
 Route::get('/addressbook/', ['middleware' => 'auth', 'uses' => 'AddressBookController@getIndex']);
+Route::delete('/addressbook/{id?}', ['middleware' => 'auth', 'uses' => 'AddressBookController@destroyIndex']);
 Route::get('/addressbook/group', ['middleware' => 'auth', 'uses' => 'AddressBookController@getGroup']);
 Route::delete('/addressbook/group/{id}', ['middleware' => 'auth', 'uses' => 'AddressBookController@destroyGroup']);
 Route::get('/addressbook/group-edit/{id?}', ['middleware' => 'auth', 'uses' => 'AddressBookController@getGroupEdit']);

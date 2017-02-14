@@ -8,7 +8,8 @@ use App\Http\Requests;
 /**
  * アドレス帳
  */
-class AddressBookController extends Controller {
+class AddressBookController extends Controller
+{
 
     // アドレス帳種別
     var $AddressBookType = array(
@@ -20,13 +21,14 @@ class AddressBookController extends Controller {
     /**
      * コンストラクタ
      */
-    public function __construct() {
+    public function __construct()
+    {
 
         // 全てのビューで利用する変数を定義
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)->get();
         $Groups = $this->_buildGroups($dbGroups);
 
-        \View::composer('addressbook.*', function($view) use ($Groups) {
+        \View::composer('addressbook.*', function ($view) use ($Groups) {
             $view->with('AddressBookType', $this->AddressBookType);
             $view->with('Groups', $Groups);
         });
@@ -37,7 +39,8 @@ class AddressBookController extends Controller {
      * @param type $Groups
      * @return type
      */
-    private function _buildGroups($Groups) {
+    private function _buildGroups($Groups)
+    {
 
         $result = null;
 
@@ -49,8 +52,8 @@ class AddressBookController extends Controller {
             foreach ($Group->childs as $item) {
                 // ToDo: 個人電話帳の考慮してない
                 $ItemCount = \App\AddressBook::where('type', $item->type)
-                        ->where('groupid', $item->id)
-                        ->count();
+                    ->where('groupid', $item->id)
+                    ->count();
 
                 $result_child[] = array(
                     'Id' => $item->id,
@@ -63,8 +66,8 @@ class AddressBookController extends Controller {
 
             // ToDo: 個人電話帳の考慮してない
             $ItemCount = \App\AddressBook::where('type', $Group->type)
-                    ->where('groupid', $Group->id)
-                    ->count();
+                ->where('groupid', $Group->id)
+                ->count();
 
             $result[$Group->type][] = array(
                 'Id' => $Group->id,
@@ -81,16 +84,43 @@ class AddressBookController extends Controller {
      * トップページ
      * @return type
      */
-    public function getIndex() {
+    public function getIndex()
+    {
 
         return view('addressbook.index');
+    }
+
+    /**
+     * 連絡先の削除
+     * @param $inputId int
+     * @return type
+     */
+    public function destroyIndex($inputId)
+    {
+
+        $id = intval($inputId);
+
+        $address = \App\AddressBook::find($id);
+
+        // 権限が無い場合は、個人電話帳のみとする
+        // ToDo 所有者チェック
+        if (!\Entrust::can('edit-addressbook') && $address['type'] != 9) {
+            abort(403);
+        }
+
+        $address->delete();
+        \Session::flash('success_message', '連絡先の削除が完了しました。');
+
+        return redirect()->action('AddressBookController@getIndex');
+
     }
 
     /**
      * グループ管理
      * @return type
      */
-    public function getGroup() {
+    public function getGroup()
+    {
 
         return view('addressbook.group');
     }
@@ -100,7 +130,8 @@ class AddressBookController extends Controller {
      * @param type $inputId
      * @return type
      */
-    public function getGroupEdit($inputId = 0) {
+    public function getGroupEdit($inputId = 0)
+    {
 
         $id = intval($inputId);
 
@@ -120,15 +151,16 @@ class AddressBookController extends Controller {
         }
 
         return view('addressbook.group_edit')
-                        ->with('editAddressBookType', $AddressBook)
-                        ->with('record', $record);
+            ->with('editAddressBookType', $AddressBook)
+            ->with('record', $record);
     }
 
     /**
      * グループ編集
      * @param Request $req
      */
-    public function postGroupEdit(\App\Http\Requests\AddressBookGroupRequest $req, $inputId = 0) {
+    public function postGroupEdit(\App\Http\Requests\AddressBookGroupRequest $req, $inputId = 0)
+    {
 
         // 権限が無い場合は、個人電話帳のみとする
         // ToDo 自分が所有しているグループかのチェック必要
@@ -145,6 +177,8 @@ class AddressBookController extends Controller {
 
         $record->save();
 
+        \Session::flash('success_message', '追加・編集が完了しました。');
+
         return redirect()->action('AddressBookController@getGroup');
     }
 
@@ -153,22 +187,22 @@ class AddressBookController extends Controller {
      * @param type $inputId
      * @return type
      */
-    public function destroyGroup($inputId) {
-
-        // 権限が無い場合は、個人電話帳のみとする
-        // ToDo 所有者チェック
-        if (!\Entrust::can('edit-addressbook') && $req['type'] != 9) {
-            abort(403);
-        }
+    public function destroyGroup($inputId)
+    {
 
         $id = intval($inputId);
 
         $group = \App\AddressBookGroup::find($id);
 
         $ItemCount = \App\AddressBook::where('type', $group->type)
-                ->where('groupid', $group->id)
-                ->count();
+            ->where('groupid', $group->id)
+            ->count();
 
+        // 権限が無い場合は、個人電話帳のみとする
+        // ToDo 所有者チェック
+        if (!\Entrust::can('edit-addressbook') && $group['type'] != 9) {
+            abort(403);
+        }
 
         if ($ItemCount == 0 && $group->childs == null) {
             $group->delete();
@@ -185,15 +219,16 @@ class AddressBookController extends Controller {
      * @param Request $req
      * @return type
      */
-    public function getSel2Group(Request $req) {
+    public function getSel2Group(Request $req)
+    {
 
         $type = intval($req['type']);
 
         $isDisable = $req['from'] == 'GroupEdit' ? false : true;
 
         $dbGroups = \App\AddressBookGroup::where('parent_groupid', 0)
-                ->where('type', $type)
-                ->get();
+            ->where('type', $type)
+            ->get();
 
         if ($dbGroups->count() == 0) {
             $result = array();
@@ -213,13 +248,14 @@ class AddressBookController extends Controller {
     }
 
     /**
-     * 
+     *
      * @param type $Groups
      * @param type $isDisable 末端のグループ以外を無効とするか
      * @param type $level
      * @return type
      */
-    private function _buildGroups2($Groups, $isDisable, $level = 1) {
+    private function _buildGroups2($Groups, $isDisable, $level = 1)
+    {
 
         $result = null;
         foreach ($Groups as $Group) {
@@ -253,7 +289,8 @@ class AddressBookController extends Controller {
      * @param type $id
      * @return type
      */
-    public function getDetail($id) {
+    public function getDetail($id)
+    {
 
         if (!intval($id)) {
             abort(400);
@@ -276,7 +313,8 @@ class AddressBookController extends Controller {
      * @param type $id
      * @return type
      */
-    public function getEdit($inputId = 0) {
+    public function getEdit($inputId = 0)
+    {
 
         $id = intval($inputId);
 
@@ -295,15 +333,16 @@ class AddressBookController extends Controller {
         }
 
         return view('addressbook.edit')
-                        ->with('editAddressBookType', $AddressBook)
-                        ->with('record', $record);
+            ->with('editAddressBookType', $AddressBook)
+            ->with('record', $record);
     }
 
     /**
      * アドレス帳 編集
      * @param Request $req
      */
-    public function postEdit(\App\Http\Requests\AddressBookRequest $req, $inputId = 0) {
+    public function postEdit(\App\Http\Requests\AddressBookRequest $req, $inputId = 0)
+    {
 
         // 権限が無い場合は、個人電話帳のみとする
         if (!\Entrust::can('edit-addressbook') && $req['type'] != 9) {
@@ -326,6 +365,8 @@ class AddressBookController extends Controller {
 
         $record->save();
 
+        \Session::flash('success_message', '追加・編集が完了しました。');
+
         return redirect()->action('AddressBookController@getIndex');
     }
 
@@ -334,7 +375,8 @@ class AddressBookController extends Controller {
      * @param Request $req
      * @return type
      */
-    public function postSearch(Request $req) {
+    public function postSearch(Request $req)
+    {
 
         $draw = $req->input('draw');
         $start = $req->input('start');
@@ -344,13 +386,13 @@ class AddressBookController extends Controller {
         $typeId = intval($req['typeId']) ? intval($req['typeId']) : -1;
 
         $items = \App\AddressBook::select($column)
-                ->where('type', $typeId);
+            ->where('type', $typeId);
 
         // 種別が個人の場合：ログイン中 ユーザの物のみを対象とする
         if ($typeId == 2) {
             $user = \Auth::user();
             $items = $items
-                    ->where('owner_userid', $user['id']);
+                ->where('owner_userid', $user['id']);
         }
 
         // 全体の件数を取得
@@ -359,38 +401,38 @@ class AddressBookController extends Controller {
         // グループで絞り込み
         if (intval($req['groupId'])) {
             $items = $items
-                    ->where('groupid', $req['groupId']);
+                ->where('groupid', $req['groupId']);
         }
 
         // キーワードで絞り込み
         if (strlen($req['keyword']) != 0) {
             $items = $items
-                    ->where(function($query) use ($req) {
-                $query
-                ->orWhere('position', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('name', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('name_kana', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('tel1', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('tel2', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('tel3', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('email', 'like', '%' . $req['keyword'] . '%')
-                ->orWhere('comment', 'like', '%' . $req['keyword'] . '%');
-            });
+                ->where(function ($query) use ($req) {
+                    $query
+                        ->orWhere('position', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('name', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('name_kana', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('tel1', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('tel2', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('tel3', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('email', 'like', '%' . $req['keyword'] . '%')
+                        ->orWhere('comment', 'like', '%' . $req['keyword'] . '%');
+                });
         }
 
         $items = $items
-                ->get();
+            ->get();
 
         // 表示する件数だけ切り出す
         $data = $items->slice($start, $length)->toArray();
 
         return \Response::json(
-                        array(
-                            'draw' => $draw,
-                            'recordsTotal' => $allCount,
-                            'recordsFiltered' => $items->count(),
-                            'data' => array_values($data)
-                        )
+            array(
+                'draw' => $draw,
+                'recordsTotal' => $allCount,
+                'recordsFiltered' => $items->count(),
+                'data' => array_values($data)
+            )
         );
     }
 

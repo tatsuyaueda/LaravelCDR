@@ -26,6 +26,9 @@
                         </label>
                     </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+                    @if(Config::get('saml2_settings.useSaml2Auth'))
+                        <a href="{{action('\Aacotroneo\Saml2\Http\Controllers\Saml2Controller@login')}}" class="btn btn-primary btn-block">SAML2でログイン</a>
+                    @endif
                     <br />
                     <div class="text-center">
                         <a href="{{action('Auth\PasswordController@getEmail')}}">パスワードをお忘れですか？</a>

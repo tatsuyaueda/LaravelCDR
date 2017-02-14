@@ -141,6 +141,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         // Entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
+        // SAML2
+        Aacotroneo\Saml2\Saml2ServiceProvider::class,
         // IDE Helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
     ],
@@ -190,5 +192,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         // Entrust
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
+        // SAML2
+        'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
     ],
 ];

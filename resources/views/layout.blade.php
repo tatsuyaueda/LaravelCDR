@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if (trim($__env->yieldContent('title')))
-        <title>@yield('title') - PBX Tool</title>
-    @else
-        <title>PBX Tool</title>
-@endif
-<!-- for responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>{{trim($__env->yieldContent('title')) ? $__env->yieldContent('title') . ' - ' : '' }}PBX Tool</title>
+    <title>PBX Tool</title>
+    <!-- for responsive -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

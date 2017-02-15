@@ -11,7 +11,8 @@
         "zizaco/entrust": "5.2.x-dev",
         "barryvdh/laravel-ide-helper": "v2.2.3",
         "doctrine/dbal": "2.3.5",
-        "aacotroneo/laravel-saml2": "0.8.1"
+        "aacotroneo/laravel-saml2": "0.8.1",
+        "predis/predis": "v1.1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

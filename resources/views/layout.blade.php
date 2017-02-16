@@ -71,7 +71,7 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     @if (Auth::guest())
-                        <li><a href="{{action('Auth\AuthController@getLogin')}}">ログイン</a></li>
+                        <li><a href="{{action('Auth\LoginController@login')}}">ログイン</a></li>
                     @else
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -105,8 +105,10 @@
                                            class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="{{action('Auth\AuthController@getLogout')}}"
-                                           class="btn btn-default btn-flat">ログアウト</a>
+                                        <form method="post" action="{{action('Auth\LoginController@logout')}}">
+                                            {!! csrf_field() !!}
+                                            <button type="submit" class="btn btn-default btn-flat">ログアウト</button>
+                                        </form>
                                     </div>
                                 </li>
                             </ul>
@@ -180,9 +182,11 @@
         type="text/javascript"></script>
 <script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.bootstrap3.js")}}"
         type="text/javascript"></script>
+<!-- Laravel Echo -->
+<script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 <!-- Original JavaScript -->
 <script src="{{asset("js/select2_InitValue.js")}}" type="text/javascript"></script>
-
+<script src="js/app.js"></script>
 <script>
     <!--
     $(document).ready(function () {

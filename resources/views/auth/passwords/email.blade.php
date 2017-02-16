@@ -17,7 +17,7 @@
                 
                 @include('notification')
 
-                <form method="POST" action="{{action('Auth\PasswordController@postEmail')}}">
+                <form method="POST" action="{{action('Auth\ForgotPasswordController@sendResetLinkEmail')}}">
                     {!! csrf_field() !!}
 
                     <div class="form-group">

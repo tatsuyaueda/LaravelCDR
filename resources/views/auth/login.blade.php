@@ -10,7 +10,7 @@
             <div class="box-body">
                 @include('notification')
 
-                <form class="form-signin" method="post" action="{{action('Auth\AuthController@postLogin')}}">
+                <form class="form-signin" method="post" action="{{action('Auth\LoginController@login')}}">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label for="username" class="sr-only">ユーザ名</label>
@@ -31,7 +31,7 @@
                     @endif
                     <br />
                     <div class="text-center">
-                        <a href="{{action('Auth\PasswordController@getEmail')}}">パスワードをお忘れですか？</a>
+                        <a href="{{action('Auth\ForgotPasswordController@showLinkRequestForm')}}">パスワードをお忘れですか？</a>
                     </div>
                 </form>
             </div>

@@ -10,7 +10,7 @@
             <div class="box-body">
                 @include('notification')
 
-                <form method="POST" action="{{action('Auth\PasswordController@postReset')}}">
+                <form method="POST" action="{{action('Auth\ResetPasswordController@reset')}}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="token" value="{{ $token }}">
 

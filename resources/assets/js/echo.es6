@@ -12,7 +12,6 @@ window.Echo.channel('BroadcastChannel')
     console.log(e);
 });
 
-
 // ToDo : ユーザIDの埋め込み必要
 window.Echo.private('PrivateChannel.1')
     .listen('MessageCreatePrivateEvent', (e) => {

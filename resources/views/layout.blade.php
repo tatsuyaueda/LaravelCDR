@@ -10,37 +10,15 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="{{asset("bower_components/AdminLTE/bootstrap/css/bootstrap.min.css")}}"/>
-    <!-- font awesome -->
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <!-- ionicons -->
-    <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"/>
-    <!-- adminLTE style -->
-    <link rel="stylesheet" type="text/css" href="{{asset("bower_components/AdminLTE/dist/css/AdminLTE.min.css")}}">
-    <link rel="stylesheet" type="text/css"
-          href="{{asset("bower_components/AdminLTE/dist/css/skins/skin-blue-light.min.css")}}">
-    <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/buttons/1.2.4/css/buttons.bootstrap.min.css">
-    <!-- DateRange Picker -->
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css">
     <!-- Toastr -->
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
-    <!-- TreeGrid -->
-    <link rel="stylesheet" type="text/css"
-          href="{{asset('bower_components/jquery-treegrid/css/jquery.treegrid.css')}}"/>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
         }
     </style>
-    <script src="{{asset("bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js")}}"
-            type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="<?= elixir('css/app.css') ?>"/>
+    <script src="<?= elixir('js/app.js') ?>" type="text/javascript"></script>
 </head>
 {{-- サイドバーの有無を確認 --}}
 <body class="skin-blue-light {{ trim($__env->yieldContent('sidebar')) ? 'sidebar-mini' : 'sidebar-collapse'}}">
@@ -154,39 +132,13 @@
         </div>
     </div>
 </div>
-
-<!-- Bootstrap -->
-<script src="{{asset("bower_components/AdminLTE/bootstrap/js/bootstrap.min.js")}}"
-        type="text/javascript"></script>
-<!-- AdminLTE -->
-<script src="{{asset("bower_components/AdminLTE/dist/js/app.min.js")}}" type="text/javascript"></script>
-<!-- DataTables -->
-<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
-<!-- BootBox -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<!-- Moment -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/ja.js"></script>
+<script src="<?= elixir('js/echo.js') ?>" type="text/javascript"></script>
 <!-- Toastr -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<!-- DataRange Picker -->
-<script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-<!-- Select2 -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/ja.js"></script>
-<!-- TreeGrid -->
-<script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.min.js")}}"
-        type="text/javascript"></script>
-<script src="{{asset("bower_components/jquery-treegrid/js/jquery.treegrid.bootstrap3.js")}}"
-        type="text/javascript"></script>
 <!-- Laravel Echo -->
 <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 <!-- Original JavaScript -->
 <script src="{{asset("js/select2_InitValue.js")}}" type="text/javascript"></script>
-<script src="js/app.js"></script>
 <script>
     <!--
     $(document).ready(function () {

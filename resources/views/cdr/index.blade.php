@@ -61,6 +61,9 @@
                 </div>
             </div>
             <div class="box">
+                <div id="resultLoading" style="visibility: hidden;" class="overlay">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
                 <div class="box-body">
                     <table class="table table-condensed table-striped" id="view">
                         <thead>
@@ -174,7 +177,12 @@
                 }
             });
 
-            $('#view').DataTable({
+            $('#view')
+                .on('processing.dt', function (e, settings, processing) {
+                    // Loading spin
+                    $('#resultLoading').css('visibility', processing ? 'visible' : 'hidden');
+                })
+                .DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Japanese.json"
                 },
@@ -185,7 +193,7 @@
                     'csvHtml5'
                 ],
                 "order": [[0, "desc"]],
-                "processing": true,
+                "processing": false,
                 "serverSide": true,
                 "searching": false,
                 "ajax": {

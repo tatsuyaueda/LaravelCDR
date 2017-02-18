@@ -16,11 +16,9 @@ class BroadcastServiceProvider extends ServiceProvider
     {
         Broadcast::routes();
 
-        /*
-         * Authenticate the user's personal channel...
-         */
+        // PrivateChannelの認証
         Broadcast::channel('PrivateChannel.*', function ($user, $userId) {
-            \Log::debug(print_r($user,true));
+            // ログイン中のユーザと一致すれば、OK
             return (int)$user->id === (int)$userId;
         });
     }

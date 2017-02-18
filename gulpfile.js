@@ -23,6 +23,7 @@ var paths = {
     'bootstrap_daterangepicker': '/node_modules/bootstrap-daterangepicker',
     'jquery_treegrid': '/node_modules/jquery-treegrid',
     'bootbox': '/node_modules/bootbox',
+    'pnotify': '/node_modules/pnotify',
     'moment': '/node_modules/moment',
     'select2': '/node_modules/select2/dist'
 }
@@ -51,6 +52,8 @@ elixir(function (mix) {
             paths.fontawesome + '/css/font-awesome.css',
             // jQuery TreeGrid
             paths.jquery_treegrid + '/css/jquery.treegrid.css',
+            // PNotify
+            paths.pnotify + '/dist/pnotify.css',
             // Select2
             paths.select2 + '/css/select2.min.css'
         ], 'public/css/app.css', './')
@@ -76,6 +79,9 @@ elixir(function (mix) {
             paths.jquery_treegrid + '/js/jquery.treegrid.min.js',
             paths.jquery_treegrid + '/js/jquery.treegrid.bootstrap3.js',
             paths.bootbox + '/bootbox.min.js',
+            // PNotify
+            paths.pnotify + '/dist/pnotify.js',
+            paths.pnotify + '/dist/pnotify.desktop.js',
             // Select2
             paths.select2 + '/js/select2.min.js',
             paths.select2 + '/js/i18n/ja.js'

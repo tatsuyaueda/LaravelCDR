@@ -15,7 +15,7 @@ class AddressBookController extends Controller
     var $AddressBookType = array(
         1 => '内線電話帳',
         2 => '共通電話帳',
-        9 => '個人電話帳',
+        //9 => '個人電話帳',
     );
 
     /**
@@ -204,7 +204,7 @@ class AddressBookController extends Controller
             abort(403);
         }
 
-        if ($ItemCount == 0 && $group->childs == null) {
+        if ($ItemCount == 0 && count($group->childs) == 0) {
             $group->delete();
             \Session::flash('success_message', 'グループの削除が完了しました。');
         } else {
@@ -389,7 +389,7 @@ class AddressBookController extends Controller
             ->where('type', $typeId);
 
         // 種別が個人の場合：ログイン中 ユーザの物のみを対象とする
-        if ($typeId == 2) {
+        if ($typeId == 9) {
             $user = \Auth::user();
             $items = $items
                 ->where('owner_userid', $user['id']);
@@ -436,6 +436,18 @@ class AddressBookController extends Controller
 
         // 表示する件数だけ切り出す
         $data = $items->slice($start, $length)->toArray();
+
+        foreach ($data as $key => &$value) {
+
+            // プレゼンス取得
+            foreach (['tel1', 'tel2', 'tel3'] as $item) {
+                // 内線と思われる物だけ取得
+                if (substr($value[$item], 0, 1) != 0) {
+                    $status = \Redis::GET('extStatus:' . $value[$item]);
+                    $value[$item . '_status'] = $status == null ? 'unknown' : $status;
+                }
+            }
+        }
 
         return \Response::json(
             array(

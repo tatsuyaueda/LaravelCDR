@@ -4900,25 +4900,91 @@ return /******/ (function(modules) { // webpackBootstrap
 },{}],3:[function(require,module,exports){
 'use strict';
 
-var _laravelEcho = require('laravel-echo');
+var _laravelEcho = require("laravel-echo");
 
 var _laravelEcho2 = _interopRequireDefault(_laravelEcho);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.Echo = new _laravelEcho2.default({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
-});
+//import $ from 'jquery'
 
-window.Echo.channel('BroadcastChannel').listen('MessageCreateBroadcastEvent', function (e) {
-    console.log(e);
-});
+// Socket IOが定義されているか、LoginUserIDが0以外か(0はログインしていない)
+if (typeof io != "undefined" && laravelLogginUserID != 0) {
+    initLaravelEcho();
+}
 
-// ToDo : ユーザIDの埋め込み必要
-window.Echo.private('PrivateChannel.1').listen('MessageCreatePrivateEvent', function (e) {
-    console.log(e);
-});
+/**
+ * Laravel Echoの初期化
+ */
+function initLaravelEcho() {
+
+    // Laravel Echoに接続
+    window.Echo = new _laravelEcho2.default({
+        broadcaster: 'socket.io',
+        host: window.location.hostname + ':6001'
+    });
+
+    // ToDo: Broadcastはログインして無くても購読できちゃう
+    // BroadcastチャンネルにJoin
+    window.Echo.channel('BroadcastChannel').listen('MessageCreateBroadcastEvent', function (e) {
+        console.log('MessageCreateBroadcastEvent');
+        console.log(e);
+    }).listen('UpdateExtStatusEvent', function (e) {
+        // 内線情報の更新
+        console.log('UpdateExtStatusEvent');
+        console.log(e);
+
+        var msg = JSON.parse(e.message.message);
+
+        procUpdateExtStatus(msg.ExtNo, msg.ExtStatus);
+    });
+
+    // PrivateチャンネルにJoin
+    window.Echo.private('PrivateChannel.' + laravelLogginUserID).listen('MessageCreatePrivateEvent', function (e) {
+        console.log('PrivateChannel');
+        console.log(e);
+    }).listen('IncomingCallEvent', function (e) {
+        // 着信があった場合
+        console.log('IncomingCallEvent');
+        console.log(e);
+
+        var msg = JSON.parse(e.message.message);
+
+        incomingCall(msg.Number, msg.DisplayName);
+    });
+}
+
+/**
+ * 着信があった場合
+ * @param number
+ * @param displayName
+ */
+function incomingCall(number, displayName) {
+
+    PNotify.desktop.permission();
+
+    new PNotify({
+        title: number + '着信中',
+        text: displayName + 'さんから着信中です。',
+        type: 'info',
+        desktop: {
+            desktop: true
+        }
+    });
+}
+
+/**
+ * 内線状態の更新
+ * @param ext
+ * @param status
+ */
+function procUpdateExtStatus(ext, status) {
+
+    // 内線情報のアップデート
+    $('i.fa.fa-circle.extStatus.ext' + ext).removeClass(function (index, className) {
+        return (className.match(/\btext-\S+/g) || []).join(' ');
+    }).addClass(extStatus[status]['statusClass']).attr('title', extStatus[status]['statusText']);
+}
 
 },{"laravel-echo":1}]},{},[3]);
 

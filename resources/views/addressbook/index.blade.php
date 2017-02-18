@@ -152,14 +152,20 @@
                             "data": null,
                             "render": function (data, type, row) {
                                 var buffer = '';
-                                if (row['tel1'])
-                                    buffer += '<i class="fa fa-phone"></i> <a href="tel:' + row['tel1'] + '">' + row['tel1'] + '</a> <i class="fa fa-circle text-success"></i><br/>';
-                                if (row['tel2'])
-                                    buffer += '<i class="fa fa-phone"></i> <a href="tel:' + row['tel2'] + '">' + row['tel2'] + '</a><br/>';
-                                if (row['tel3'])
-                                    buffer += '<i class="fa fa-phone"></i> <a href="tel:' + row['tel3'] + '">' + row['tel2'] + '</a><br/>';
+
+                                $.each(['tel1', 'tel2', 'tel3'], function (index, item) {
+                                    if (row[item]) {
+                                        var presense = extStatus[row[item + '_status']];
+
+                                        buffer += '<i class="fa fa-phone"></i> <a href="tel:' + row[item] + '">' + row[item] + '</a>'
+                                        buffer += presense ? ' <i class="' + presense['statusClass'] + ' extStatus ext' + row[item] + '" title="' + presense['statusText'] + '"></i>' : '';
+                                        buffer += '<br/>';
+                                    }
+                                });
+
                                 if (row['email'])
                                     buffer += '<i class="fa fa-envelope"></i> <a href="mailto:' + row['email'] + '">' + row['email'] + '</a>';
+
                                 return buffer;
                             },
                             "width": "300px",

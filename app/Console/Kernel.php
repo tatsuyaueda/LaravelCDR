@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
 		'App\Console\Commands\CdrImportCommand',
-        Commands\PushWebsocketNews::class,
+        Commands\IncomingCall::class,
+        Commands\UpdateExtStatus::class,
     ];
 
     /**

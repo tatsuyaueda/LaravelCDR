@@ -32,6 +32,6 @@ class MessageCreatePrivateEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('PrivateChannel.'  . $this->message->user_id);
+        return new PrivateChannel('PrivateChannel.'  . $this->message->to_user_id);
     }
 }

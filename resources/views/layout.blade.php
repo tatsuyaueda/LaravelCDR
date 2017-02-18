@@ -10,14 +10,39 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Toastr -->
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
         }
+        /* 内線プレゼンス */
+        i.extStatus::after {
+            padding-left: 3px;
+            font-size: 90%;
+            color: #333;
+            content: attr(title);
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="<?= elixir('css/app.css') ?>"/>
+    <script>
+        var extStatus = {
+            'unknown' :{
+                'statusClass': 'fa fa-circle text-gray',
+                'statusText': '不明'
+            },
+            'idle': {
+                'statusClass': 'fa fa-circle text-info',
+                'statusText': 'アイドル'
+            },
+            'away': {
+                'statusClass': 'fa fa-circle text-primary',
+                'statusText': '不在'
+            },
+            'busy': {
+                'statusClass': 'fa fa-circle text-danger',
+                'statusText': '通話中'
+            },
+        };
+    </script>
     <script src="<?= elixir('js/app.js') ?>" type="text/javascript"></script>
 </head>
 {{-- サイドバーの有無を確認 --}}
@@ -132,11 +157,14 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    <!--
+    var laravelLogginUserID = '{{ Auth::guest() ? 0: Auth::user()->id }}';
+    //-->
+</script>
 <!-- Laravel Echo -->
 <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 <script src="<?= elixir('js/echo.js') ?>" type="text/javascript"></script>
-<!-- Toastr -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <!-- Original JavaScript -->
 <script src="{{asset("js/select2_InitValue.js")}}" type="text/javascript"></script>
@@ -147,8 +175,8 @@
             locale: 'ja',
         });
 
-        // toastr オプション
-        toastr.options.closeButton = true;
+        // PNotify オプション
+        PNotify.prototype.options.styling = 'bootstrap3';
 
         $.fn.select2.defaults.set('lang', 'ja');
 

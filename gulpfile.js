@@ -18,6 +18,7 @@ var paths = {
     'datatables': '/node_modules/datatables',
     'datatables_bootstrap': '/node_modules/datatables-bootstrap',
     'datatables_buttons': '/node_modules/datatables-buttons',
+    'datatables_plugins': '/node_modules/drmonty-datatables-plugins',
     'fontawesome': '/node_modules/font-awesome',
     'bootstrap_daterangepicker': '/node_modules/bootstrap-daterangepicker',
     'jquery_treegrid': '/node_modules/jquery-treegrid',
@@ -81,10 +82,20 @@ elixir(function (mix) {
         ], 'public/js/app.js', './')
         .browserify('echo.es6')
         .copy(
+            'node_modules/drmonty-datatables-plugins/i18n',
+            'public/build/datatables-i18n'
+        )
+        .copy(
             'node_modules/bootstrap/dist/fonts',
             'public/build/fonts'
-        ).copy(
+        )
+        .copy(
             'node_modules/font-awesome/fonts',
             'public/build/fonts'
-        ).version(['css/app.css', 'js/app.js', 'js/echo.js']);
+        )
+        .version([
+            'css/app.css',
+            'js/app.js',
+            'js/echo.js'
+        ]);
 });

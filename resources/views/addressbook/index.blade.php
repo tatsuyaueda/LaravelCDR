@@ -111,7 +111,7 @@
                 })
                 .DataTable({
                     "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Japanese.json"
+                        "url": "{{url('/build/datatables-i18n/Japanese.json')}}"
                     },
                     dom: "<'row'<'col-sm-12'<'pull-right'l>>>" +
                     "<'row'<'col-sm-12'tr>>" +

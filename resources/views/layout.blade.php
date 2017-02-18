@@ -132,11 +132,12 @@
         </div>
     </div>
 </div>
+<!-- Laravel Echo -->
+<script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 <script src="<?= elixir('js/echo.js') ?>" type="text/javascript"></script>
 <!-- Toastr -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<!-- Laravel Echo -->
-<script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
+
 <!-- Original JavaScript -->
 <script src="{{asset("js/select2_InitValue.js")}}" type="text/javascript"></script>
 <script>

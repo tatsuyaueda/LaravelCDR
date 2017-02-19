@@ -7,11 +7,11 @@
         <div class="sidebar">
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-circle" alt="User Image">
+                    <img src="{{$avater_image}}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p>{{ Auth::user()->name }}</p>
-                    @if(Auth::user()->AddressBook()->tel1)
+                    @if(Auth::user()->AddressBook() && Auth::user()->AddressBook()->tel1)
                         <i class="fa fa-phone"></i>
                         {{ Auth::user()->AddressBook()->tel1 }}
                         <i class="myExtStatus extStatus ext{{ Auth::user()->AddressBook()->tel1 }}" title="不明"></i>

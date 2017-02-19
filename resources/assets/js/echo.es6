@@ -19,6 +19,33 @@ function initLaravelEcho() {
         host: window.location.hostname + ':6001'
     });
 
+    window.Echo.connector.socket.on('disconnect', function () {
+        $('#laravelEchoStatus')
+            .removeClass(function (index, className) {
+                return (className.match(/\bfa-bell\S+/g) || []).join(' ');
+            })
+            .addClass('fa-bell-slash-o');
+        console.log('disconnect');
+    });
+
+    window.Echo.connector.socket.on('connect', function () {
+        $('#laravelEchoStatus')
+            .removeClass(function (index, className) {
+                return (className.match(/\bfa-bell\S+/g) || []).join(' ');
+            })
+            .addClass('fa-bell-o');
+        console.log('connect');
+    });
+
+    window.Echo.connector.socket.on('reconnect', function () {
+        $('#laravelEchoStatus')
+            .removeClass(function (index, className) {
+                return (className.match(/\bfa-bell\S+/g) || []).join(' ');
+            })
+            .addClass('fa-bell-o');
+        console.log('reconnect');
+    });
+
     // ToDo: Broadcastはログインして無くても購読できちゃう
     // BroadcastチャンネルにJoin
     window.Echo.channel('BroadcastChannel')

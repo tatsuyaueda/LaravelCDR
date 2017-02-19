@@ -73,22 +73,25 @@
             </ul>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li class=" notifications-menu">
+                        <a>
+                            <i id="laravelEchoStatus" class="fa fa-bell-slash-o"></i>
+                        </a>
+                    </li>
                     @if (Auth::guest())
                         <li><a href="{{action('Auth\LoginController@login')}}">ログイン</a></li>
                     @else
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-                                     class="user-image" alt="User Image">
+                                <img src="{{$avater_image}}" class="user-image" alt="User Image">
                                 {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-                                         class="img-circle" alt="User Image">
+                                    <img src="{{$avater_image}}" class="img-circle" alt="User Image">
                                     <p>
                                         {{ Auth::user()->name }}
                                     </p>

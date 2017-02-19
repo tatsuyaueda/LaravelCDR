@@ -139,6 +139,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
         // Laravel Debugbar
         Barryvdh\Debugbar\ServiceProvider::class,
         // Entrust

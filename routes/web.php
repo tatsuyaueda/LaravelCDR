@@ -34,6 +34,10 @@ Route::post('/addressbook/edit/{id?}', ['middleware' => 'auth', 'uses' => 'Addre
 Auth::routes();
 
 // ユーザ管理(一般ユーザ)
+Route::get('user/', ['middleware' => 'auth', 'uses' => 'UserController@getIndex']);
+Route::post('user/', ['middleware' => 'auth', 'uses' => 'UserController@postIndex']);
+Route::get('user/addressbook', ['middleware' => 'auth', 'uses' => 'UserController@getAddressBook']);
+Route::post('user/addressbook', ['middleware' => 'auth', 'uses' => 'UserController@postAddressBook']);
 Route::get('user/password', ['middleware' => 'auth', 'uses' => 'UserController@getPassword']);
 Route::post('user/password', ['middleware' => 'auth', 'uses' => 'UserController@postPassword']);
 

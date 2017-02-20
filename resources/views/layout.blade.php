@@ -14,6 +14,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', meiryo, sans-serif;
         }
+
         /* 内線プレゼンス */
         i.extStatus::after {
             padding-left: 3px;
@@ -25,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="<?= elixir('css/app.css') ?>"/>
     <script>
         var extStatus = {
-            'unknown' :{
+            'unknown': {
                 'statusClass': 'fa fa-circle text-gray',
                 'statusText': '不明'
             },
@@ -89,26 +90,23 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <!-- User image -->
                                 <li class="user-header">
                                     <img src="{{$avater_image}}" class="img-circle" alt="User Image">
                                     <p>
                                         {{ Auth::user()->name }}
                                     </p>
                                 </li>
-                                <!-- Menu Body -->
+                                @role('admin')
                                 <li class="user-body">
-                                    @role('admin')
                                     <div class="col-xs-12 text-center">
                                         <a href="{{action('AdminController@getIndex')}}">ユーザ管理</a>
                                     </div>
-                                    @endif
                                 </li>
-                                <!-- Menu Footer-->
+                                @endif
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="{{action('UserController@getPassword')}}"
-                                           class="btn btn-default btn-flat">Profile</a>
+                                        <a href="{{action('UserController@getIndex')}}"
+                                           class="btn btn-default btn-flat">ユーザ情報</a>
                                     </div>
                                     <div class="pull-right">
                                         <form method="post" action="{{action('Auth\LoginController@logout')}}">

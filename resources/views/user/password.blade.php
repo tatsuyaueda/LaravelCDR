@@ -1,11 +1,7 @@
-@extends('layout')
-
-@section('title', 'ユーザ情報')
+@extends('user.layout')
 
 @section('content')
-<section class="content-header">
-    <h1>@yield('title')</h1>
-</section>
+    @@parent
 <section class="content">
     <form method="post" action="{{action('UserController@postPassword')}}">
         <div class="box">

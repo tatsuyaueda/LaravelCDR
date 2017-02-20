@@ -5,17 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
-    public function getIndex() {
+    public function getIndex()
+    {
+        $UserID = \Auth::user()->id;
+
         return view('user.index');
     }
 
-    public function getPassword() {
+    public function getAddressBook()
+    {
+
+        $UserID = \Auth::user()->id;
+
+        $record = \App\AddressBook::where('type', 1)
+            ->where('owner_userid', $UserID)
+            ->get()
+            ->first();
+
+        if(!$record){
+            abort(403);
+        }
+
+        return view('user.addressbook')
+            ->with('record', $record);
+
+    }
+
+    public function getPassword()
+    {
         return view('user.password');
     }
 
-    public function postPassword(Request $request) {
+    public function postPassword(Request $request)
+    {
 
         $UserID = \Auth::user()->id;
 

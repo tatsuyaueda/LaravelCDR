@@ -367,7 +367,12 @@ class AddressBookController extends Controller
 
         \Session::flash('success_message', '追加・編集が完了しました。');
 
-        return redirect()->action('AddressBookController@getIndex');
+        if($req['returnView'] === 'user'){
+            return redirect()->action('UserController@getAddressBook');
+        }else{
+            return redirect()->action('AddressBookController@getIndex');
+        }
+
     }
 
     /**

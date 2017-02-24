@@ -10,7 +10,7 @@
                         <img class="profile-user-img img-responsive img-circle"
                              src="{{$avater_image}}" alt="User profile picture">
 
-                        <h3 class="profile-username text-center">{{Auth::user()->name}}</h3>
+                        <h3 class="profile-username text-center">{{Auth::user()->AddressBook()->name}}</h3>
 
                         <p class="text-muted text-center">{{Auth::user()->AddressBook()->position}}</p>
                     </div>
